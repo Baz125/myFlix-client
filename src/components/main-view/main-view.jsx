@@ -14,9 +14,9 @@ export const MainView = () => {
             },
             Director: {
                 Name: 'Jonathan Demme',
-                Bio: 'Robert Jonathan Demme was an American director, producer, and screenwriter.',
-                Birth: '1944',
-                Death: '2017'
+                Bio: 'Robert Jonathan Demme was an American director, producer, and screenwriter.' ,
+                Birth: '1944' ,
+                Death: '2017' 
             },
             ImagePath: 'https://m.media-amazon.com/images/I/510sBwiR7SL._AC_UF1000,1000_QL80_.jpg',
             Actors: ['Anthony Hopkins', 'Jodie Foster'],
@@ -47,7 +47,7 @@ export const MainView = () => {
             Genre: {
                 Name: 'Thriller',
                 Description: 'Thriller film, also known as suspense film or suspense thriller, is a broad film genre that involves excitement and suspense in the audience.'
-            },
+        },
             Director: {
                 Name: 'Michael Mann',
                 Bio: 'American director and screenwriter who was known for both his film and television work. He specialized in crime dramas, and he was known for work that showcased an elegantly stylized realism.',

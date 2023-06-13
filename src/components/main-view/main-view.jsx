@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const Mainview = () => {
+export const MainView = () => {
     const [movies, setMovies] = useState([
         {
             id: 1,

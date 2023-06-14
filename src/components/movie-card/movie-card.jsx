@@ -2,9 +2,6 @@ import PropTypes from "prop-types";
 
 //Function Component
 export const MovieCard = ({ movie, onMovieClick }) => {
-    console.log("Movie:", movie);
-    // console.log("Title:", movie && movie.title);
-
     return (
         <div
             onClick={() => {

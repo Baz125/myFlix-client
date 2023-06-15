@@ -10,9 +10,10 @@ export const MainView = () => {
     useEffect(() => {
         fetch("https://moviedb125.herokuapp.com/movies")
             .then((response) => response.json())
-            // .then((data) => {
-            //     console.log("movies from api:", data);
-            // })
+            .then((data) => {
+                console.log("movies from api:", data)
+                return data
+            })
             .then((data) => {
                 const moviesFromApi = data.map((doc) => {
                     return {

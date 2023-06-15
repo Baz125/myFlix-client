@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
+import { LoginView } from "../login-view/login-view";
 
 export const MainView = () => {
     const [movies, setMovies] = useState([]);
-
     const [selectedMovie, setSelectedMovie] = useState(null);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
 
     useEffect(() => {
+        if (!token) {
+            return;
+        }
+
         fetch("https://moviedb125.herokuapp.com/movies")
             .then((response) => response.json())
             .then((data) => {
@@ -25,13 +31,24 @@ export const MainView = () => {
                         actors: doc.Actors,
                         genre: doc.Genre,
                         featured: doc.Featured,
-                        releaseyear: doc.ReleaseYear 
+                        releaseyear: doc.ReleaseYear
                     };
                 });
                 setMovies(moviesFromApi);
             });
             
-    }, []);
+    }, [token]);
+
+    if (!user) {
+        return <LoginView
+            onLoggedIn={(user, token) => {
+                setUser(user);
+                setToken(token);
+            }}
+        />
+    }
+
+
 
     if (selectedMovie) {
         let similarMovies = movies.filter(checkGenre);
@@ -54,7 +71,7 @@ export const MainView = () => {
                 />
                 ))}
             </>
-    )};
+        )};
 
     if (movies.length === 0) {
         return <div> The list is empty</div>;
@@ -62,15 +79,19 @@ export const MainView = () => {
 
     return (
         <div>
-            {movies.map((movie) => (
-                <MovieCard
-                    key={movie.id}
-                    movie={movie}
-                    onMovieClick={(newSelectedMovie) => {
-                        setSelectedMovie(newSelectedMovie);
-                    }} 
-                />
-            ))}
+            <div>
+                {movies.map((movie) => (
+                    <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        onMovieClick={(newSelectedMovie) => {
+                            setSelectedMovie(newSelectedMovie);
+                        }} 
+                    />
+                ))}
+            </div>
+            <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
         </div>
+            
     );
 };

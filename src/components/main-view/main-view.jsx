@@ -46,7 +46,7 @@ export const MainView = () => {
                 <h2> SimilarMovies</h2>
                 {similarMovies.map((movie) => (
                 <MovieCard
-                    key={movie._id}
+                    key={movie.id}
                     movie={movie}
                     onMovieClick={(newSelectedMovie) => {
                         setSelectedMovie(newSelectedMovie);    
@@ -64,7 +64,7 @@ export const MainView = () => {
         <div>
             {movies.map((movie) => (
                 <MovieCard
-                    key={movie._id}
+                    key={movie.id}
                     movie={movie}
                     onMovieClick={(newSelectedMovie) => {
                         setSelectedMovie(newSelectedMovie);

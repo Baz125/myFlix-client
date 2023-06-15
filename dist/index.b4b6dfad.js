@@ -27229,7 +27229,7 @@ const MainView = ()=>{
                         onMovieClick: (newSelectedMovie)=>{
                             setSelectedMovie(newSelectedMovie);
                         }
-                    }, movie._id, false, {
+                    }, movie.id, false, {
                         fileName: "src/components/main-view/main-view.jsx",
                         lineNumber: 48,
                         columnNumber: 17
@@ -27250,7 +27250,7 @@ const MainView = ()=>{
                 onMovieClick: (newSelectedMovie)=>{
                     setSelectedMovie(newSelectedMovie);
                 }
-            }, movie._id, false, {
+            }, movie.id, false, {
                 fileName: "src/components/main-view/main-view.jsx",
                 lineNumber: 66,
                 columnNumber: 17
@@ -28367,7 +28367,7 @@ MovieView.propTypes = {
         featured: (0, _propTypesDefault.default).bool.isRequired,
         title: (0, _propTypesDefault.default).string.isRequired,
         image: (0, _propTypesDefault.default).string.isRequired,
-        director: (0, _propTypesDefault.default).string
+        director: (0, _propTypesDefault.default).object
     }).isRequired,
     onBackClick: (0, _propTypesDefault.default).func.isRequired
 };

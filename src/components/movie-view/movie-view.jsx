@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 
-export const MovieView = ({ movie, onBackClick }) => {
-    console.log
+export const MovieView = ({ movie, onBackClick, movies }) => {
     return (
         <div>
             <div>
@@ -26,6 +25,7 @@ export const MovieView = ({ movie, onBackClick }) => {
             <button onClick={onBackClick}>Back</button>
         </div>
     );
+
 };
 
 MovieView.propTypes = {

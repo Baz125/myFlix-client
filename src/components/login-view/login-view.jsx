@@ -10,8 +10,8 @@ export const LoginView = ({ onLoggedIn }) => {
         event.preventDefault();
 
         const data = {
-            access: username,
-            secret: password
+            username: username,
+            password: password
         };
 
         fetch("https://moviedb125.herokuapp.com/login", {
@@ -25,6 +25,8 @@ export const LoginView = ({ onLoggedIn }) => {
             .then((data) => {
                 console.log("Login response: ", data);
                 if (data.user) {
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    localStorage.setItem("token, data.token");
                     onLoggedIn(data.user, data.token);
                 } else {
                     alert("No such user");
@@ -53,7 +55,7 @@ export const LoginView = ({ onLoggedIn }) => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    minlength="6"
+                    minLength="6"
                 />
             </label>
             <label>
@@ -63,7 +65,7 @@ export const LoginView = ({ onLoggedIn }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minlength="6"
+                    minLength="6"
                 />
             </label>
             <button type="submit">"Submit"</button>

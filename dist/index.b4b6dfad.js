@@ -27183,7 +27183,9 @@ const MainView = ()=>{
     const [user, setUser] = (0, _react.useState)(null);
     const [token, setToken] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
-        if (!token) return;
+        // if (!token) {
+        //     return;
+        // }
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: {
                 Authorization: `Bearer ${token}`

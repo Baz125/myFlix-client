@@ -13,9 +13,9 @@ export const MainView = () => {
     const [token, setToken] = useState(null);
 
     useEffect(() => {
-        if (!token) {
-            return;
-        }
+        // if (!token) {
+        //     return;
+        // }
 
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },

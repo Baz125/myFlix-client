@@ -83,7 +83,7 @@ export const MainView = () => {
                         movie={selectedMovie}
                         onBackClick={() => setSelectedMovie(null)} />
                 </Col>
-                <hr />
+                {/* <hr />
                 <h2> SimilarMovies</h2>
                     {similarMovies.map((movie) => (
                     <Col key={movie.id} md={3}>
@@ -95,13 +95,12 @@ export const MainView = () => {
                             }}
                         />
                     </Col>
-                ))}
+                ))} */}
             </>
             ) : movies.length === 0 ? (
                 <div> The list is empty</div>
             ) : (
-                <div>
-                    <div>
+                <>
                         {movies.map((movie) => (
                             <Col key={movie.id} md={3}>
                                 <MovieCard
@@ -112,9 +111,9 @@ export const MainView = () => {
                                 />
                             </Col>
                         ))}
-                    </div>
-                //     <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
-                // </div>
+
+                 {/* <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button> */}
+                 </>
             )}          
         </Row>
     );

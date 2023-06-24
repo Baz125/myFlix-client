@@ -1,15 +1,21 @@
 import PropTypes from "prop-types";
+import { Button, Card } from "react-bootstrap";
+import { useBootstrapBreakpoints } from "react-bootstrap/esm/ThemeProvider";
 
 //Function Component
 export const MovieCard = ({ movie, onMovieClick }) => {
     return (
-        <div
+        <Card
             onClick={() => {
                 onMovieClick(movie);
             }}
         >
-            {movie.title}
-        </div>
+            <Card.Body>
+                <Card.Img variant="top" src={movie.image} />
+                <Card.Title>{movie.title}</Card.Title>
+                <Card.Text>{movie.actors.join(" & ")}</Card.Text>
+            </Card.Body>
+        </Card>
     );
 };
 

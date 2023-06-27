@@ -5,6 +5,7 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Button } from "react-bootstrap";
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -63,7 +64,7 @@ export const MainView = () => {
 
     return (
         <Row className="justify-content-md-center">
-            {!user ? (
+            {!token ? (
                     <Col md={5}>
                         <LoginView
                             onLoggedIn={(user, token) => {
@@ -77,13 +78,13 @@ export const MainView = () => {
             ) : selectedMovie ? (
 
             <>
-                <Col md={8} style={{ border: "1px solid black" }}>
+                <Col md={8} className="mx-auto" style={{ border: "1px solid black" }}>
                     <MovieView
                         style={{ border: "1px solid green" }}
                         movie={selectedMovie}
                         onBackClick={() => setSelectedMovie(null)} />
                 </Col>
-                {/* <hr />
+                <hr />
                 <h2> SimilarMovies</h2>
                     {similarMovies.map((movie) => (
                     <Col key={movie.id} md={3}>
@@ -95,14 +96,14 @@ export const MainView = () => {
                             }}
                         />
                     </Col>
-                ))} */}
+                ))}
             </>
             ) : movies.length === 0 ? (
                 <div> The list is empty</div>
             ) : (
                 <>
                         {movies.map((movie) => (
-                            <Col key={movie.id} md={3}>
+                            <Col className="mb-5" key={movie.id} md={3}>
                                 <MovieCard
                                     movie={movie}
                                     onMovieClick={(newSelectedMovie) => {
@@ -112,7 +113,7 @@ export const MainView = () => {
                             </Col>
                         ))}
 
-                 {/* <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button> */}
+                 <Button variant="danger" onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
                  </>
             )}          
         </Row>

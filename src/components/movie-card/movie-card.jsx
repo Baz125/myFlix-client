@@ -6,6 +6,7 @@ import { useBootstrapBreakpoints } from "react-bootstrap/esm/ThemeProvider";
 export const MovieCard = ({ movie, onMovieClick }) => {
     return (
         <Card
+            className="h-100"
             onClick={() => {
                 onMovieClick(movie);
             }}

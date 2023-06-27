@@ -8,7 +8,7 @@ export const LoginView = ({ onLoggedIn }) => {
     const [password, setPassword] = useState("");
 
     const handleSubmit = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
 
         const data = {
             username: username,
@@ -41,10 +41,6 @@ export const LoginView = ({ onLoggedIn }) => {
                 if (data.ok) {
                     onLoggedIn(username);
                 }
-                //I don't know why this was here, but it was causeing a login failed error on successful login
-                // } else {
-                //     alert("Login failed");
-                // }
 
             })
             .catch((e) => {

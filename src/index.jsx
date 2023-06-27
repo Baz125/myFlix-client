@@ -3,13 +3,12 @@ import { MainView } from "./components/main-view/main-view";
 import Container from "react-bootstrap/Container";
 
 // Iport statement to indicate that you need to bundle `./index.scss`
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
 
 // Main componend (will eventually use all the others)
 const MyFlixApplication = () => {
     return (
-        <Container style={{border: "1px solid red"}}>
+        <Container>
             <MainView />
         </Container>
     ); 

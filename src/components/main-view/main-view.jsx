@@ -78,7 +78,7 @@ export const MainView = () => {
             ) : selectedMovie ? (
 
             <>
-                <Col md={8} className="mx-auto" style={{ border: "1px solid black" }}>
+                <Col md={8} className="mx-auto">
                     <MovieView
                         style={{ border: "1px solid green" }}
                         movie={selectedMovie}

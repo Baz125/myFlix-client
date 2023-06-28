@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,7 +15,7 @@ export const MainView = () => {
     const storedToken = localStorage.getItem("token");
     const [movies, setMovies] = useState([]);
     // const [selectedMovie, setSelectedMovie] = useState(null);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(storedUser);
     const [token, setToken] = useState(storedToken);
 
     useEffect(() => {
@@ -118,7 +119,22 @@ export const MainView = () => {
                                 )}
                             </>
                         }
-                     />      
+                    />      
+                    <Route
+                        path="/profile-view"
+                        element={
+                            <>
+                                {!user ? (
+                                    console.log("user not found"),
+                                    <Navigate to="/login" replace />
+                                ) : (
+                                    <Col md={8}>
+                                        <ProfileView user={storedUser} />
+                                    </Col>
+                                )}
+                            </>
+                        }
+                     />  
                     <Route
                         path="/"
                         element={

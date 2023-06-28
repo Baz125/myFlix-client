@@ -38,11 +38,11 @@ export const MovieView = ({ movies }) => {
 
 };
 
-MovieView.propTypes = {
-    movie: PropTypes.shape({
-        featured: PropTypes.bool.isRequired,
-        title: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
-        director: PropTypes.object
-    }).isRequired,
-};
+// MovieView.propTypes = {
+//     movie: PropTypes.shape({
+//         featured: PropTypes.bool.isRequired,
+//         title: PropTypes.string.isRequired,
+//         image: PropTypes.string.isRequired,
+//         director: PropTypes.object
+//     }).isRequired,
+// };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap"; 
-import {Navigatge} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 export const LoginView = ({ onLoggedIn }) => {
     //These states are created in order to "bind" the username and password to them
@@ -49,7 +49,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 console.log("Something went wrong", e);
             });
     };
-    
+
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="loginUsername">

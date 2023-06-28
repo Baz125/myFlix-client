@@ -46859,20 +46859,21 @@ const MovieView = ({ movies })=>{
         lineNumber: 13,
         columnNumber: 9
     }, undefined);
-}; // MovieView.propTypes = {
- //     movie: PropTypes.shape({
- //         featured: PropTypes.bool.isRequired,
- //         title: PropTypes.string.isRequired,
- //         image: PropTypes.string.isRequired,
- //         director: PropTypes.object
- //     }).isRequired,
- // };
+};
 _s(MovieView, "e2L2DPdRH1AShA7yIOCsYRlzvlI=", false, function() {
     return [
         (0, _reactRouterDom.useParams)
     ];
 });
 _c = MovieView;
+MovieView.propTypes = {
+    movie: (0, _propTypesDefault.default).shape({
+        featured: (0, _propTypesDefault.default).bool.isRequired,
+        title: (0, _propTypesDefault.default).string.isRequired,
+        image: (0, _propTypesDefault.default).string.isRequired,
+        director: (0, _propTypesDefault.default).object
+    }).isRequired
+};
 var _c;
 $RefreshReg$(_c, "MovieView");
 
@@ -46924,7 +46925,7 @@ const LoginView = ({ onLoggedIn })=>{
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("token", data.token);
                 onLoggedIn(data.user, data.token);
-                return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(Navigate, {
+                return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
                     to: "/"
                 }, void 0, false, {
                     fileName: "src/components/login-view/login-view.jsx",

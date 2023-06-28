@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@parcel/transformer-react-refresh-wrap": "^2.9.3",
     "bootstrap": "^5.3.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

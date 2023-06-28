@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
@@ -12,7 +13,7 @@ export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
     const [movies, setMovies] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
+    // const [selectedMovie, setSelectedMovie] = useState(null);
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(storedToken);
 
@@ -40,8 +41,7 @@ export const MainView = () => {
                         actors: doc.Actors,
                         genre: doc.Genre,
                         featured: doc.Featured,
-                        releaseyear: doc.ReleaseYear,
-                        image: doc.ImagePath
+                        releaseyear: doc.ReleaseYear
                     };
                 });
                 setMovies(moviesFromApi);
@@ -65,8 +65,15 @@ export const MainView = () => {
 
     return (    
         <BrowserRouter>
+            <NavigationBar
+                token={token}
+                onLoggedOut={() => {
+                    setUser(null);
+                    setToken(null);
+                    localStorage.clear();
+                }}        
+            />
             <Row className="justify-content-md-center">
-                <>
                 <Routes>
                     <Route
                         path="/signup"
@@ -133,9 +140,6 @@ export const MainView = () => {
                         }
                     />
                     </Routes>
-                    <Button variant="danger" onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
-
-                </>
             </Row>
         </BrowserRouter>
     );

@@ -11,12 +11,18 @@ import { Button } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
     const [movies, setMovies] = useState([]);
+    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
+    const [token, setToken] = useState(storedToken ? storedToken : null);
+    const [moviesFromApi, setMoviesFromApi] = useState([]);
     // const [selectedMovie, setSelectedMovie] = useState(null);
-    const [user, setUser] = useState(storedUser);
-    const [token, setToken] = useState(storedToken);
+
+    const updateUser = user => {
+        setUser(user);
+        localStorage.setItem("user", user);
+    } 
 
     useEffect(() => {
         if (!token) {
@@ -46,6 +52,7 @@ export const MainView = () => {
                     };
                 });
                 setMovies(moviesFromApi);
+                
             })
             .catch(err => console.log("not authorized"))
             
@@ -98,7 +105,12 @@ export const MainView = () => {
                                     <Navigate to="/" />
                                 ) : (
                                     <Col md={5}>
-                                        <LoginView onLoggedIn={(user) => setUser(user)} />
+                                        <LoginView
+                                            onLoggedIn={(user, token) => {
+                                                setUser(user);
+                                                setToken(token);
+                                            }}
+                                        />
                                     </Col>
                                 )}
                             </>
@@ -129,7 +141,17 @@ export const MainView = () => {
                                     <Navigate to="/login" replace />
                                 ) : (
                                     <Col md={8}>
-                                        <ProfileView user={storedUser} />
+                                            <ProfileView
+                                                movies={movies}
+                                                user={user}
+                                                token={token}
+                                                onLoggedOut={() => {
+                                                    setUser(null);
+                                                    setToken(null);
+                                                    localStorage.clear();
+                                                }}
+                                                updateUser={updateUser}
+                                            />
                                     </Col>
                                 )}
                             </>
@@ -147,7 +169,7 @@ export const MainView = () => {
                                     <>
                                         {movies.map((movie) => (      
                                             <Col className="mb-4" key={movie.id} md={3}>
-                                                <MovieCard movie={movie} />
+                                                <MovieCard movie={movie} user={user} token={token} />
                                             </Col>
                                         ))}
                                     </>

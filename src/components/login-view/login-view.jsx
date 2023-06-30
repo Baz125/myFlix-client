@@ -25,6 +25,7 @@ export const LoginView = ({ onLoggedIn }) => {
             .then(response => {
                 console.log(response)
                 if (response.status !== 200) {
+                    alert ("Username or password is incorrect")
                     throw new Error(response.body.message)
                 }
                 return response;
@@ -35,6 +36,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 if (data.user) {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("username", data.user.Username);
                     onLoggedIn(data.user, data.token);
                     return <Navigate to="/" />;
                 } else {

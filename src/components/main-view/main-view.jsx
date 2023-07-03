@@ -18,7 +18,6 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
 
     const updateUser = user => {
         setUser(user);
@@ -154,7 +153,9 @@ export const MainView = () => {
                                 {!token ? (
                                     <Navigate to="/login" replace />
                                 ) : movies.length === 0 ? (
-                                    <Col>The list is empty!</Col>
+                                        <Col>
+                                         <img src={countdown} />
+                                        </Col>
                                 ) : (
                                     <>
                                         {movies.map((movie) => (      

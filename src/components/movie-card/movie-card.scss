@@ -1,0 +1,18 @@
+.Card.Body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    }
+
+.card-content {
+    margin-top: auto;
+    }
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    }
+
+.align-right {
+    margin-left: auto;
+    }

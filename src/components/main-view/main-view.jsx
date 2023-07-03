@@ -8,7 +8,8 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import countdown from "../../../assets/countdown.gif";
 
 export const MainView = () => {
     const storedUser = localStorage.getItem("user");
@@ -17,7 +18,7 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
-    // const [selectedMovie, setSelectedMovie] = useState(null);
+    const [selectedMovie, setSelectedMovie] = useState(null);
 
     const updateUser = user => {
         setUser(user);
@@ -57,19 +58,6 @@ export const MainView = () => {
             .catch(err => console.log("not authorized"))
             
     }, [token]);
-
-// I needed to move these functions and variable declarations above the return, 
-//because function and variable declarations are not allowed inside JSX code blocks/
-// In doing so I created an error that selctedMovie movie was undefined
-// in line 60. the fix was to replace the following line with the one below ->let similarMovies = movies.filter(checkGenre);    
-    
-//     const similarMovies = selectedMovie
-//     ? movies.filter((movie) => checkGenre(movie))
-//     : [];
-
-//     function checkGenre(movies) {
-//         return selectedMovie.genre.Name === movies.genre.Name;
-//    }
 
     return (    
         <BrowserRouter>
@@ -123,7 +111,9 @@ export const MainView = () => {
                                 {!token ? (
                                     <Navigate to="/login" replace />
                                 ) : movies.length === 0 ? (
-                                    <Col>The list is empty!</Col>
+                                        <Col>
+                                        <Image src={countdown} fluid />
+                                        </Col>
                                 ) : (
                                     <Col md={8}>
                                         <MovieView movies={movies} />
@@ -140,7 +130,7 @@ export const MainView = () => {
                                     console.log("user not found"),
                                     <Navigate to="/login" replace />
                                 ) : (
-                                    <Col md={8}>
+                                    <Col>
                                             <ProfileView
                                                 movies={movies}
                                                 user={user}
@@ -169,7 +159,7 @@ export const MainView = () => {
                                     <>
                                         {movies.map((movie) => (      
                                             <Col className="mb-4" key={movie.id} md={3}>
-                                                <MovieCard movie={movie} user={user} token={token} />
+                                                <MovieCard onClick movie={movie} user={user} token={token} />
                                             </Col>
                                         ))}
                                     </>

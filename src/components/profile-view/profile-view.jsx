@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
-import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { Col, Form, Button } from "react-bootstrap";
+import { Col, Form, Button, Container, Row, Card } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
+import accountIcon from "../../../assets/account-circle.svg";
+import './profile-view.scss';
 
 export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     
@@ -113,49 +114,62 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     }
 
     return (
-        <div>
-            <div>
-                <span>Username: </span>
-                <span>{user.Username}</span>
-            </div>
-            <div>
-                <span>Email: </span>
-                <span>{user.Email}</span>
-            </div>
-            {user.Birthday && (
-                <div>
-                    <span>Birthday: </span>
-                    <span>{formatDateForFrontEnd(user.Birthday)}</span>
-                </div>
-            )}
-            <div>
+        <Container>
+            <Row className="d-flex justify-content-center p-4 profile-view">
+            <Card
+                style={{ minWidth: "10rem", maxWidth: "20rem" }}
+                className="shadow-lg p-3 rounded-4 text-center"
+                text="secondary"
+                >
+                    <div className="image-container">
+                <Card.Img
+                    variant="top"
+                    src={accountIcon}
+                    className="card-image"
+                        /> 
+                    </div>
+                <Card.Body>
+                    <Card.Title>Profile Information</Card.Title>   
+                    <Card.Text>
+                    <div>
+                        <span>Username: </span>
+                        <span>{user.Username}</span>
+                    </div>
+                    <div>
+                        <span>Email: </span>
+                        <span>{user.Email}</span>
+                    </div>
+                    {user.Birthday && (
+                    <div>
+                        <span>Birthday: </span>
+                        <span>{formatDateForFrontEnd(user.Birthday)}</span>
+                    </div>
+                    )}
+                    </Card.Text>
+                    <Button onClick={handleShowModal1} className="primary-button" style={{ cursor: "pointer" }}>Update user information</Button>
+                    <Button onClick={handleShowModal2} variant="danger" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
+                </Card.Body>    
+            </Card>
+            </Row>
+            <Row className="favorite-movies">
                 {!favoriteMovies ? (
                     <div>You have no favourite movies yet!</div>
                 ) : ( 
                     <>   
                         <h3>Favourite Movies: </h3>
-                        <span>
-                        {favoriteMovies.map(movie => (
-                            <Col className="mb-4" key={movie.id} xl={2} lg={3} md={4} xs={6}>
+                {favoriteMovies.map(movie => (
+                            <Col className="mb-4" key={movie.id} md={4}>
                                 <MovieCard movie={movie} />
                             </Col>
                         ))}
-                            </span>
                     </>
                 )}
-
-                
-                
-            </div>
+            </Row>
 
 
             <Link to={`/`}>
                 <Button className="back-button" style={{ cursor: "pointer" }}>Back</Button>
             </Link>
-
-            <Button onClick={handleShowModal1} className="primary-button" style={{ cursor: "pointer" }}>Update user information</Button>
-            <Button onClick={handleShowModal2} variant="danger" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
-
             
             <Modal show={showModal1} onHide={handleCloseModal1} centered>
                 <Modal.Header closeButton>
@@ -233,7 +247,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
                 </Modal.Footer>
             </Modal>
 
-        </div>
+        </Container>
     );
 
 };

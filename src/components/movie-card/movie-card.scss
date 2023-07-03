@@ -2,17 +2,19 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    }
-
-.card-content {
-    margin-top: auto;
-    }
-
-.button-container {
+  }
+  
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .card-text-container {
+    flex-grow: 1;
+  }
+  
+  .button-container {
     display: flex;
     justify-content: space-between;
-    }
-
-.align-right {
-    margin-left: auto;
-    }
+  }

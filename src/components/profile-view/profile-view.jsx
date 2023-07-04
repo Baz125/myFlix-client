@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { Col, Form, Button, Container, Row, Card } from "react-bootstrap";
@@ -10,22 +9,43 @@ import { MovieCard } from "../movie-card/movie-card";
 import accountIcon from "../../../assets/account-circle.svg";
 import './profile-view.scss';
 
-export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
+export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
     
-    //states to manage changes to user information
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [birthday, setBirthday] = useState("");
-    
-    //takes movies and filters for favourites
-    console.log(user);
-    let favoriteMovies = movies.filter(m => user.FavoriteMovies.includes(m.id));
+    const date = user.Birthday ? new Date(user?.Birthday) : null
+    console.log("date variable:", date);
 
-    // //this code was used in earlier attempts to fix issues and can likely be removed
-    // const storedToken = localStorage.getItem("token");
-    // let storedUsername = localStorage.getItem("username");
-    // const [userData, setUserData] = useState();
+    //states to manage changes to user information
+    const [username, setUsername] = useState(user.Username);
+    const [email, setEmail] = useState(user.Email);
+    const [birthday, setBirthday] = useState(date ? format(date, "yyyy-MM-dd") : "");
+    const [favoriteMovies, setFavoriteMovies] = useState([user.FavoriteMovies]);
+
+    const storedToken = localStorage.getItem("token");
+    console.log("birthday as state: ", birthday)
+
+    //takes movies and filters for favourites
+    let displayFavorites= movies.filter(m => favoriteMovies.includes(m.id));
+
+    //fetch favourite movies
+    useEffect(() => {
+        if (!token) {
+            return;
+        }
+
+        fetch(`https://moviedb125.herokuapp.com/users/${user.Username}/favoritemovies`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${storedToken}` },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return data
+            })
+            .then((data) => {
+                setFavoriteMovies(data);             
+            })
+            .catch(err => console.log("not authorized", err))
+            
+    }, [token]);
     
     //code for the modals
     const [showModal1, setShowModal1] = useState(false);
@@ -35,18 +55,15 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     const [showModal2, setShowModal2] = useState(false);
     const handleCloseModal2 = () => setShowModal2(false);
     const handleShowModal2 = () => setShowModal2(true);
-
-
-        
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const data = {
-            username: username,
-            password: password,
-            email: email,
-            birthday: birthday
+            Username: username,
+            Email: email,
+            Birthday: birthday
         };
 
         fetch(`https://moviedb125.herokuapp.com/users/${user.Username}`, {
@@ -60,9 +77,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
         }).then((response) => {
             if (response.ok) {
                 alert("User information updated successfully");
-                // updateUser(user);
-                window.location.reload();
-                // console.log(response.json());
+                // window.location.reload();
                 return response.json();
 
             } else {
@@ -74,16 +89,8 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     const handleDelete = (event) => {
         event.preventDefault();
 
-        const data = {
-            username: username,
-            password: password,
-            email: email,
-            birthday: birthday
-        };
-
         fetch(`https://moviedb125.herokuapp.com/users/${user.Username}`, {
             method: "DELETE",
-            body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${storedToken}`
@@ -93,7 +100,6 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
             if (response.ok) {
                 alert("Your account has been deleted, we're sorry to see you go!");
                 onLoggedOut();
-                // console.log(response.json());
                 return response.json();
 
             } else {
@@ -119,7 +125,8 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
             <Card
                 style={{ minWidth: "10rem", maxWidth: "20rem" }}
                 className="shadow-lg p-3 rounded-4 text-center"
-                text="secondary"
+                text="light"
+                bg="secondary"
                 >
                     <div className="image-container">
                 <Card.Img
@@ -152,17 +159,17 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
             </Card>
             </Row>
             <Row className="favorite-movies">
-                {!favoriteMovies ? (
+                {!displayFavorites ? (
                     <div>You have no favourite movies yet!</div>
                 ) : ( 
                     <>   
                         <h3>Favourite Movies: </h3>
-                {favoriteMovies.map(movie => (
+                {displayFavorites.map(movie => (
                             <Col className="mb-4" key={movie.id} md={4}>
                                 <MovieCard movie={movie} />
                             </Col>
                         ))}
-                    </>
+                        </>
                 )}
             </Row>
 
@@ -176,24 +183,12 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
                     <Modal.Title>Add your updated information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
                     <Form.Group controlId="formUsername">
                     <Form.Label>Username:</Form.Label>
                         <Form.Control
                             type="text"
-                            value={user.Username}
+                            value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            required
-                            minLength="3"
-                        />
-                    </Form.Group>
-
-                    <Form.Group controlId="formPassword">
-                    <Form.Label>Password: </Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
                             required
                             minLength="3"
                         />
@@ -213,15 +208,12 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
                     <Form.Label>Birthday: </Form.Label>
                         <Form.Control
                             type="date"
-                            // value={format(new Date(birthday), 'yyyy-MM-dd')}
+                            value={birthday}
                             onChange={(e) => setBirthday(e.target.value)}
                             required
                         />
                     </Form.Group>
                     
-                    
-                    <Button variant="primary" type="submit">Submit</Button>
-                </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal1}>

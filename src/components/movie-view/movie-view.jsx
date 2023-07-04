@@ -40,10 +40,10 @@ export const MovieView = ({ movies }) => {
                 </Link>
             </Row>
             <hr />
-            <Row style={{ border: "1px solid yellow" }}>
+            <Row text="light">
             <h2> SimilarMovies</h2>
                 {similarMovies.map((movie) => (
-                    <Col className="mb-4" key={movie.id} md={4}>
+                    <Col text="light" className="mb-4" key={movie.id} md={4}>
                         <MovieCard
                             style={{ border: "1px solid green" }}
                             movie={movie}

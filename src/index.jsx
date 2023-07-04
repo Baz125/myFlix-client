@@ -9,7 +9,7 @@ import "./custom.scss";
 const MyFlixApplication = () => {
     return (
         <Container>
-            <MainView />
+            <MainView text="light" />
         </Container>
     ); 
 };

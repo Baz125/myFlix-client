@@ -7,7 +7,6 @@ import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
 
@@ -156,10 +155,12 @@ export const MainView = () => {
                                         <Col>
                                          <img src={countdown} />
                                         </Col>
-                                ) : (
-                                    <>
+                                    ) : (
+                                            
+                                            <>
+                                                <h1 className="justify-content-md-center" text="light" >Click on a movie to learn more!</h1>
                                         {movies.map((movie) => (      
-                                            <Col className="mb-4" key={movie.id} md={3}>
+                                            <Col className="mb-4" key={movie.id} md={3} text="light">
                                                 <MovieCard onClick movie={movie} user={user} token={token} />
                                             </Col>
                                         ))}

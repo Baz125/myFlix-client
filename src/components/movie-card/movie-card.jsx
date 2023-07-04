@@ -4,7 +4,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useBootstrapBreakpoints } from "react-bootstrap/esm/ThemeProvider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -55,30 +54,26 @@ export const MovieCard = ({ movie, user, token }) => {
     };
 
     return (
-        <Card
-            className="h-100"
-            onClick={handleCardClick}
-            style={{ cursor: 'pointer' }}
-        >
-            {/* <Link to={`/movies/${movie.id}`} className="movie-card"> */}
+        <Card className="h-100" text="light" bg="secondary">
             <div className="card-content">  
-                <Card.Body>                     
+                <Card.Body>    
+                    <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
                     <Card.Img variant="top" src={movie.image} />
                     <Card.Title>{movie.title}</Card.Title>
                     <div className="card-text-container">
                         <Card.Text>{movie.actors.join(" & ")}</Card.Text>
+                        </div>
                     </div>
                     <div className="button-container">
-                        <Button onClick={handleAddFavorite} variant="info">
+                        <Button onClick={handleAddFavorite} variant="primary">
                         <FontAwesomeIcon icon={faThumbsUp} />
                         </Button>
-                        <Button onClick={handleRemoveFavorite} variant="info">
+                        <Button onClick={handleRemoveFavorite} variant="primary">
                         <FontAwesomeIcon icon={faThumbsDown} />
                         </Button>   
                     </div>                       
                 </Card.Body>
             </div>
-            {/* </Link> */}
         </Card>
     );
 };

@@ -4,6 +4,8 @@ $secondary: Dimgrey;
 $light: #D9CB9E;
 $warning: #14dc8c;
 
-
+*{
+    color: $light !important;
+}
 
 @import '~bootstrap/scss/bootstrap.scss';

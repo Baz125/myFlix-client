@@ -17,12 +17,14 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(date ? format(date, "yyyy-MM-dd") : "");
-    const [favoriteMovies, setFavoriteMovies] = useState([user.FavoriteMovies]);
+    const [favoriteMovies, setFavoriteMovies] = useState(user.FavoriteMovies);
 
     const storedToken = localStorage.getItem("token");
+    console.log(user.FavoriteMovies)
 
     //takes movies and filters for favourites
-    let displayFavorites= movies.filter(m => favoriteMovies.includes(m.id));
+    let displayFavorites = movies.filter(m => favoriteMovies.includes(m.id));
+    
 
     //fetch favourite movies
     useEffect(() => {
@@ -156,7 +158,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
             </Card>
             </Row>
             <Row className="favorite-movies">
-                {!displayFavorites ? (
+                {!displayFavorites.length  ? (
                     <div>You have no favourite movies yet!</div>
                 ) : ( 
                     <>   

@@ -5,13 +5,13 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, user, token }) => {
     const { movieId } = useParams();
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const movie = movies.find((m) => m.id === movieId);
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
-    console.log("similar movies", similarMovies);
 
     return (
         <Container>
@@ -40,13 +40,15 @@ export const MovieView = ({ movies }) => {
                 </Link>
             </Row>
             <hr />
-            <Row text="light">
+            <Row>
             <h2> SimilarMovies</h2>
                 {similarMovies.map((movie) => (
                     <Col text="light" className="mb-4" key={movie.id} md={4}>
                         <MovieCard
                             style={{ border: "1px solid green" }}
                             movie={movie}
+                            user={user}
+                            token={token}
                         />
                     </Col>
                 ))}

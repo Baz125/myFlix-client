@@ -11,10 +11,10 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
 
 export const MainView = () => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
     const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
+    const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
 
@@ -67,7 +67,7 @@ export const MainView = () => {
                     localStorage.clear();
                 }}        
             />
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-md-center px-5">
                 <Routes>
                     <Route
                         path="/signup"
@@ -114,7 +114,7 @@ export const MainView = () => {
                                         </Col>
                                 ) : (
                                     <Col md={8}>
-                                        <MovieView movies={movies} />
+                                        <MovieView movies={movies} user={user} token={token} />
                                     </Col>
                                 )}
                             </>

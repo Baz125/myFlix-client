@@ -12,7 +12,6 @@ import './profile-view.scss';
 export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
     
     const date = user.Birthday ? new Date(user?.Birthday) : null
-    console.log("date variable:", date);
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
@@ -21,7 +20,6 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
     const [favoriteMovies, setFavoriteMovies] = useState([user.FavoriteMovies]);
 
     const storedToken = localStorage.getItem("token");
-    console.log("birthday as state: ", birthday)
 
     //takes movies and filters for favourites
     let displayFavorites= movies.filter(m => favoriteMovies.includes(m.id));
@@ -34,7 +32,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
 
         fetch(`https://moviedb125.herokuapp.com/users/${user.Username}/favoritemovies`, {
             method: "GET",
-            headers: { Authorization: `Bearer ${storedToken}` },
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then((response) => response.json())
             .then((data) => {
@@ -71,13 +69,12 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
             body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${storedToken}`
+                "Authorization": `Bearer ${token}`
             },
 
         }).then((response) => {
             if (response.ok) {
                 alert("User information updated successfully");
-                // window.location.reload();
                 return response.json();
 
             } else {
@@ -153,8 +150,8 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                     </div>
                     )}
                     </Card.Text>
-                    <Button onClick={handleShowModal1} className="primary-button" style={{ cursor: "pointer" }}>Update user information</Button>
-                    <Button onClick={handleShowModal2} variant="danger" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
+                    <Button onClick={handleShowModal1} variant="primary" style={{ cursor: "pointer" }}>Update user information</Button>
+                    <Button onClick={handleShowModal2} variant="primary" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
                 </Card.Body>    
             </Card>
             </Row>
@@ -166,7 +163,10 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                         <h3>Favourite Movies: </h3>
                 {displayFavorites.map(movie => (
                             <Col className="mb-4" key={movie.id} md={4}>
-                                <MovieCard movie={movie} />
+                                <MovieCard
+                            movie={movie}
+                            token={token}
+                                />
                             </Col>
                         ))}
                         </>

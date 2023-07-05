@@ -8,7 +8,7 @@ import "./custom.scss";
 // Main component (will eventually use all the others)
 const MyFlixApplication = () => {
     return (
-        <Container>
+        <Container fluid className="p-0">
             <MainView text="light" />
         </Container>
     ); 

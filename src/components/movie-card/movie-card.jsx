@@ -12,11 +12,12 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 export const MovieCard = ({ movie, user, token }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
 
-        fetch(`https://moviedb125.herokuapp.com/users/${user.Username}/movies/${encodeURIComponent(movie.id)}`, {
+        fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -36,7 +37,7 @@ export const MovieCard = ({ movie, user, token }) => {
     const handleRemoveFavorite = (event) => {
         event.preventDefault();
 
-        fetch(`https://moviedb125.herokuapp.com/users/${user.Username}/movies/${encodeURIComponent(movie.id)}`, {
+        fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -66,10 +67,10 @@ export const MovieCard = ({ movie, user, token }) => {
                     </div>
                     <div className="button-container">
                         <Button onClick={handleAddFavorite} variant="primary">
-                        <FontAwesomeIcon icon={faThumbsUp} />
+                        <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#D9CB9E" }} />
                         </Button>
                         <Button onClick={handleRemoveFavorite} variant="primary">
-                        <FontAwesomeIcon icon={faThumbsDown} />
+                        <FontAwesomeIcon icon={faThumbsDown} style={{ color: "#D9CB9E" }} />
                         </Button>   
                     </div>                       
                 </Card.Body>

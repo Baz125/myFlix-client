@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -8,19 +7,14 @@ import { Col, Form, Button, Container, Row, Card } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import accountIcon from "../../../assets/account-circle.svg";
 import './profile-view.scss';
+import moment from "moment/moment";
 
 export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
-    
-    const date = user.Birthday ? new Date(user?.Birthday) : null
-
-    console.log("DATE", date); 
-    console.log(format(date, "yyyy-MM-dd"));
-    
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
-    const [birthday, setBirthday] = useState(date ? format(date, "yyyy-MM-dd") : "");
+    const [birthday, setBirthday] = useState(user.Birthday);
     const [favoriteMovies, setFavoriteMovies] = useState(user.FavoriteMovies);
 
     const storedToken = localStorage.getItem("token");
@@ -110,17 +104,6 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
             }
         });
     }
- 
-    
-    const formatDateForFrontEnd = (dateString) => {
-        const date = new Date(dateString);
-        return format(date, "dd MMM yyyy");
-    }
-
-    const formatDateForBackEnd = (dateString) => {
-        const date = new Date(dateString);
-        return format(date, "yyyy mm dd");
-    }
 
     return (
         <Container>
@@ -152,7 +135,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                     {user.Birthday && (
                     <div>
                         <span>Birthday: </span>
-                        <span>{formatDateForFrontEnd(user.Birthday)}</span>
+                        <span>{moment(user.Birthday).format("Do MMM YYYY")}</span>
                     </div>
                     )}
                     </Card.Text>
@@ -214,7 +197,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                     <Form.Label>Birthday: </Form.Label>
                         <Form.Control
                             type="date"
-                            value={birthday}
+                            value={moment(birthday).format("YYYY-MM-DD")}
                             onChange={(e) => setBirthday(e.target.value)}
                             required
                         />

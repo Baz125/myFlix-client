@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel index.html --sass --verbose"
+    "dev": "parcel index.html --sass --verbose",
+    "start": "parcel src/index.html"
   },
   "author": "",
   "license": "ISC",

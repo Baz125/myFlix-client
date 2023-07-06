@@ -55,7 +55,7 @@ export const MainView = () => {
             })
             .catch(err => console.log("not authorized"))
             
-    }, [token]);
+    }, [token, user]);
 
     const updateFavorites = (movieId) => {
         // if the movie is already in the favorites list, remove it

@@ -13,13 +13,10 @@ export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("typeof: ", typeof updateUserMovies);
-
+    const [isFav, setIsFav] = useState(storedUser.FavoriteMovies.includes(movie.id))
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
-        console.log("typeof: ", typeof updateUserMovies);
-
 
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "PUT",
@@ -72,12 +69,16 @@ export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
                         </div> */}
                     </div>
                     <div className="button-container">
-                        <Button onClick={handleAddFavorite} variant="primary">
-                        <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#D9CB9E" }} />
-                        </Button>
-                        <Button onClick={handleRemoveFavorite} variant="primary">
-                        <FontAwesomeIcon icon={faThumbsDown} style={{ color: "#D9CB9E" }} />
-                        </Button>   
+                        {/* Ren: Added condition to show fav buttons */}
+                        {!isFav ?
+                            (<Button onClick={handleAddFavorite} variant="info">
+                            <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#D9CB9E" }} />
+                            </Button>) 
+                            :
+                            (<Button onClick={handleRemoveFavorite} variant="primary">
+                            <FontAwesomeIcon icon={faThumbsDown} style={{ color: "#D9CB9E" }} />
+                            </Button>)
+                        }
                     </div>                       
                 </Card.Body>
             </div>

@@ -15,11 +15,11 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(user.Birthday);
-    const [favoriteMovies, setFavoriteMovies] = useState(movies.filter(m => user.FavoriteMovies.includes(m.id)));
+    const [favoriteMovies, setFavoriteMovies] = useState([]);
 
     const storedToken = localStorage.getItem("token");
     console.log("user.Favs: ", user.FavoriteMovies);
-    console.log("state favs: ", favoriteMovies);
+    console.log("state favs: ", favoriteMovies, movies.filter(m => user.FavoriteMovies.includes(m.id)), movies);
     
     const updateFavorites = (movieId) => {
         // if the movie is already in the favorites list, remove it
@@ -35,20 +35,10 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
             return;
         }
 
-        fetch(`https://moviedb125.herokuapp.com/users/${user.Username}/favoritemovies`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                return data
-            })
-            .then((data) => {
-                setFavoriteMovies(movies.filter(m => data.includes(m.id)));   
-            })
-            .catch(err => console.log("not authorized", err))
+        console.log("setFav",movies.filter(m => user.FavoriteMovies.includes(m.id)))
+        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id)));
             
-    }, [token]);
+    }, [token,movies]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
     
     //code for the modals
     const [showUpdateModal, setUpdateModal] = useState(false);
@@ -149,8 +139,10 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
                     </div>
                     )}
                     </Card.Text>
-                    <Button onClick={handleShowUpdateModal} variant="primary" style={{ cursor: "pointer" }}>Update user information</Button>
-                    <Button onClick={handleShowDeleteModal} variant="primary" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
+
+                    <Button onClick={handleShowUpdateModal} variant="info" style={{ cursor: "pointer" }} className="modalBtn">Update user information</Button>
+
+                    <Button onClick={handleShowDeleteModal} variant="primary" className="warning-button modalBtn" style={{ cursor: "pointer" }}>Delete Account</Button>
                 </Card.Body>    
             </Card>
             </Row>

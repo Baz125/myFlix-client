@@ -3,9 +3,10 @@ import "./movie-card.scss";
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
 
 //Function Component
@@ -64,19 +65,19 @@ export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
                     <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
                     <Card.Img variant="top" src={movie.image} />
                     <Card.Title>{movie.title}</Card.Title>
-                    {/* <div className="card-text-container">
+                    <div className="card-text-container">
                         <Card.Text>{movie.actors.join(" & ")}</Card.Text>
-                        </div> */}
+                        </div>
                     </div>
                     <div className="button-container">
                         {/* Ren: Added condition to show fav buttons */}
                         {!isFav ?
                             (<Button onClick={handleAddFavorite} variant="info">
-                            <FontAwesomeIcon icon={faThumbsUp} style={{ color: "#D9CB9E" }} />
+                            <FontAwesomeIcon icon={faHeartRegular}  />
                             </Button>) 
                             :
-                            (<Button onClick={handleRemoveFavorite} variant="primary">
-                            <FontAwesomeIcon icon={faThumbsDown} style={{ color: "#D9CB9E" }} />
+                            (<Button onClick={handleRemoveFavorite} variant="info">
+                            <FontAwesomeIcon icon={faHeart}  />
                             </Button>)
                         }
                     </div>                       

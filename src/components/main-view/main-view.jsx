@@ -10,6 +10,7 @@ import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
 
+
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
@@ -22,7 +23,7 @@ export const MainView = () => {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
     } 
-
+    
     useEffect(() => {
         if (!token) {
             return;

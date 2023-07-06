@@ -35,7 +35,7 @@ export const SignupView = () => {
     }
     return (
         <>
-            <h1>Have you not yet signed up?</h1>
+            <h1>Sign up for a free account</h1>
             <p>Give us some info about yourself below, and we'll create you a free account</p>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formUsername">

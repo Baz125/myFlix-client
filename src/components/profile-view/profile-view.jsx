@@ -13,6 +13,10 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
     
     const date = user.Birthday ? new Date(user?.Birthday) : null
 
+    console.log("DATE", date); 
+    console.log(format(date, "yyyy-MM-dd"));
+    
+
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);

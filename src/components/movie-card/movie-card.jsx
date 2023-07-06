@@ -9,13 +9,17 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 
 //Function Component
-export const MovieCard = ({ movie, user, token }) => {
+export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log("typeof: ", typeof updateUserMovies);
+
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
+        console.log("typeof: ", typeof updateUserMovies);
+
 
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "PUT",
@@ -26,6 +30,7 @@ export const MovieCard = ({ movie, user, token }) => {
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been added to your favorites!`);
+                updateUserMovies(movie.id);
             } else {
                 alert("something didn't work")
             }
@@ -46,6 +51,7 @@ export const MovieCard = ({ movie, user, token }) => {
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been removed from your favorites!`);
+                updateUserMovies(movie.id);
             } else {
                 alert("something didn't work")
             }
@@ -61,9 +67,9 @@ export const MovieCard = ({ movie, user, token }) => {
                     <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
                     <Card.Img variant="top" src={movie.image} />
                     <Card.Title>{movie.title}</Card.Title>
-                    <div className="card-text-container">
+                    {/* <div className="card-text-container">
                         <Card.Text>{movie.actors.join(" & ")}</Card.Text>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="button-container">
                         <Button onClick={handleAddFavorite} variant="primary">

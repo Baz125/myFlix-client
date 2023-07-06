@@ -20,7 +20,7 @@ export const MainView = () => {
 
     const updateUser = user => {
         setUser(user);
-        localStorage.setItem("user", user);
+        localStorage.setItem("user", JSON.stringify(user));
     } 
 
     useEffect(() => {
@@ -56,6 +56,14 @@ export const MainView = () => {
             .catch(err => console.log("not authorized"))
             
     }, [token]);
+
+    const updateFavorites = (movieId) => {
+        // if the movie is already in the favorites list, remove it
+        // if not, add it
+        const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
+        updateUser({ ...user, FavoriteMovies: updatedFavMovies });
+        console.log("updated favs: ", updatedFavMovies);
+    }
 
     return (    
         <BrowserRouter>
@@ -161,7 +169,7 @@ export const MainView = () => {
                                                 <h1 className="justify-content-md-center" text="light" >Click on a movie to learn more!</h1>
                                         {movies.map((movie) => (      
                                             <Col className="mb-4" key={movie.id} md={3} text="light">
-                                                <MovieCard onClick movie={movie} user={user} token={token} />
+                                                <MovieCard onClick movie={movie} user={user} token={token} updateUserMovies={updateFavorites}/>
                                             </Col>
                                         ))}
                                     </>

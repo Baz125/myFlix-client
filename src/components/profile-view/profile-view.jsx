@@ -9,20 +9,25 @@ import accountIcon from "../../../assets/account-circle.svg";
 import './profile-view.scss';
 import moment from "moment/moment";
 
-export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
+export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(user.Birthday);
-    const [favoriteMovies, setFavoriteMovies] = useState(user.FavoriteMovies);
+    const [favoriteMovies, setFavoriteMovies] = useState(movies.filter(m => user.FavoriteMovies.includes(m.id)));
 
     const storedToken = localStorage.getItem("token");
-    console.log(user.FavoriteMovies)
-
-    //takes movies and filters for favourites
-    let displayFavorites = movies.filter(m => favoriteMovies.includes(m.id));
+    console.log("user.Favs: ", user.FavoriteMovies);
+    console.log("state favs: ", favoriteMovies);
     
+    const updateFavorites = (movieId) => {
+        // if the movie is already in the favorites list, remove it
+        // if not, add it
+        const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
+        updateUser({ ...user, FavoriteMovies: updatedFavMovies });
+        console.log("updated favs: ", updatedFavMovies);
+    }
 
     //fetch favourite movies
     useEffect(() => {
@@ -39,20 +44,20 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                 return data
             })
             .then((data) => {
-                setFavoriteMovies(data);             
+                setFavoriteMovies(movies.filter(m => data.includes(m.id)));   
             })
             .catch(err => console.log("not authorized", err))
             
     }, [token]);
     
     //code for the modals
-    const [showModal1, setShowModal1] = useState(false);
-    const handleCloseModal1 = () => setShowModal1(false);
-    const handleShowModal1 = () => setShowModal1(true);
+    const [showUpdateModal, setUpdateModal] = useState(false);
+    const handleCloseUpdateModal = () => setUpdateModal(false);
+    const handleShowUpdateModal = () => setUpdateModal(true);
 
-    const [showModal2, setShowModal2] = useState(false);
-    const handleCloseModal2 = () => setShowModal2(false);
-    const handleShowModal2 = () => setShowModal2(true);
+    const [showDeleteModal, setDeleteModal] = useState(false);
+    const handleCloseDeleteModal = () => setDeleteModal(false);
+    const handleShowDeleteModal = () => setDeleteModal(true);
     
 
     const handleSubmit = (event) => {
@@ -80,6 +85,11 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
             } else {
                 alert("Update failed");
             }
+        })
+            .then((data) => { 
+                console.log("resolved data", data);
+                updateUser(data);
+                handleCloseUpdateModal();
         });
     }
 
@@ -139,22 +149,23 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                     </div>
                     )}
                     </Card.Text>
-                    <Button onClick={handleShowModal1} variant="primary" style={{ cursor: "pointer" }}>Update user information</Button>
-                    <Button onClick={handleShowModal2} variant="primary" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
+                    <Button onClick={handleShowUpdateModal} variant="primary" style={{ cursor: "pointer" }}>Update user information</Button>
+                    <Button onClick={handleShowDeleteModal} variant="primary" className="warning-button" style={{ cursor: "pointer" }}>Delete Account</Button>
                 </Card.Body>    
             </Card>
             </Row>
             <Row className="favorite-movies">
-                {!displayFavorites.length  ? (
+                {!favoriteMovies.length  ? (
                     <div>You have no favourite movies yet!</div>
                 ) : ( 
                     <>   
                         <h3>Favourite Movies: </h3>
-                {displayFavorites.map(movie => (
+                {favoriteMovies.map(movie => (
                             <Col className="mb-4" key={movie.id} md={4}>
                                 <MovieCard
                             movie={movie}
                             token={token}
+                            updateUserMovies={updateFavorites}
                                 />
                             </Col>
                         ))}
@@ -167,7 +178,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                 <Button className="back-button" style={{ cursor: "pointer" }}>Back</Button>
             </Link>
             
-            <Modal show={showModal1} onHide={handleCloseModal1} centered>
+            <Modal show={showUpdateModal} onHide={handleCloseUpdateModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Add your updated information</Modal.Title>
                 </Modal.Header>
@@ -205,7 +216,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                     
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal1}>
+                    <Button variant="secondary" onClick={handleCloseUpdateModal}>
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleSubmit}>
@@ -214,12 +225,12 @@ export const ProfileView = ({user, token, onLoggedOut, movies,}) => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showModal2} onHide={handleCloseModal2} centered>
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Are you sure you want to delete your account? :(</Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal2}>
+                    <Button variant="secondary" onClick={handleCloseDeleteModal}>
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={handleDelete}>

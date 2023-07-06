@@ -15,18 +15,13 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(user.Birthday);
-    const [favoriteMovies, setFavoriteMovies] = useState([]);
+    const [favoriteMovies, setFavoriteMovies] = useState([]); // Ren: Moved value set to useEffect.
 
     const storedToken = localStorage.getItem("token");
-    console.log("user.Favs: ", user.FavoriteMovies);
-    console.log("state favs: ", favoriteMovies, movies.filter(m => user.FavoriteMovies.includes(m.id)), movies);
     
     const updateFavorites = (movieId) => {
-        // if the movie is already in the favorites list, remove it
-        // if not, add it
         const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
         updateUser({ ...user, FavoriteMovies: updatedFavMovies });
-        console.log("updated favs: ", updatedFavMovies);
     }
 
     //fetch favourite movies
@@ -34,10 +29,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
         if (!token) {
             return;
         }
-
-        console.log("setFav",movies.filter(m => user.FavoriteMovies.includes(m.id)))
-        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id)));
-            
+        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Ren: Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
     }, [token,movies]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
     
     //code for the modals

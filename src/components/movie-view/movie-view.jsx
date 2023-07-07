@@ -1,11 +1,10 @@
-import PropTypes from "prop-types";
-import { Button, Col, Row, Container } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
-import "./movie-view.scss";
-import "./movie-view.scss";
 
-export const MovieView = ({ movies, token, updateFavorites, favoriteMovies }) => {
+export const MovieView = ({ user, token }) => {
+    const movies = useSelector((state) => state.movies);
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);

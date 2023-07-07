@@ -2,25 +2,26 @@ import { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
+import { setMovies } from "../../redux/reducers/movies";
 import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
-import { ProfileView } from "../profile-view/profile-view";
-import { SignupView } from "../signup-view/signup-view";
+
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
-    const storedUsername = localStorage.getItem("username");
-    
-    const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const movies = useSelector((state) => state.movies);
+    const user = useSelector((state) => state.user);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
+
+    const dispatch = useDispatch();
 
     const updateUser = user => {
         setUser(user);
@@ -68,7 +69,7 @@ export const MainView = () => {
                         releaseyear: doc.ReleaseYear
                     };
                 });
-                setMovies(moviesFromApi);
+                dispatch(setMovies(moviesFromApi));
                 
             })
             .catch(err => console.log("not authorized"))   
@@ -95,7 +96,6 @@ export const MainView = () => {
             <NavigationBar
                 token={token}
                 onLoggedOut={() => {
-                    setUser(null);
                     setToken(null);
                     localStorage.clear();
                 }}        
@@ -147,12 +147,7 @@ export const MainView = () => {
                                         </Col>
                                 ) : (
                                     <Col md={8}>
-                                        <MovieView
-                                                movies={movies}
-                                                token={token}
-                                                favoriteMovies={favoriteMovies}
-                                                updateFavorites={updateFavorites}
-                                            />
+                                        <MovieView user={user} token={token} />
                                     </Col>
                                 )}
                             </>

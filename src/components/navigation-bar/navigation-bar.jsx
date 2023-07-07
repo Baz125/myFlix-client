@@ -9,10 +9,11 @@ export const NavigationBar = ({ token, onLoggedOut }) => {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const onLogoutClick = () => {
-        dispatch(setUser(null));
-        onLoggedOut();
-    }
+ //this function was created in order to run both functions on click, becuase onLoggedOut doesn't just deal with user it deals with token (and the instructions that told me to remove it, didn't take token in to account) 
+    // const onLogoutClick = () => {
+    //     onLoggedOut();
+    //     dispatch(setUser(null));
+    // }
 
     return (
         <Navbar bg="primary" data-bs-theme="dark" expand="md" text="light" className="mb-4">
@@ -37,7 +38,7 @@ export const NavigationBar = ({ token, onLoggedOut }) => {
                         <>
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/profile-view">My Profile</Nav.Link>
-                            <Nav.Link onClick={() => onLogoutClick()}>Logout</Nav.Link>
+                            <Nav.Link onClick={() => dispatch(setUser(null))}>Logout</Nav.Link>
                         </>
                         )}
                     </Nav>

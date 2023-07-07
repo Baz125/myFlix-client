@@ -41,13 +41,14 @@ export const LoginView = ({ onLoggedIn }) => {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("username", data.user.Username);
-                    onLoggedIn(data.user, data.token);
+                    onLoggedIn(data.token);
                     return <Navigate to="/" />;
                 } else {
                     alert("No such user");
                 }
                 if (data.ok) {
-                    dispatch(setUser(username));
+                    dispatch(setUser(data.user));
+                    // onLoggedIn(username);
                 }
 
             })

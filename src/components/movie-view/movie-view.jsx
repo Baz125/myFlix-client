@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
 export const MovieView = ({ user, token }) => {
-    const movies = useSelector((state) => state.movies);
+    const movies = useSelector((state) => state.movies.list);
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);

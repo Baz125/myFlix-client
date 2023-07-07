@@ -1,12 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap"; 
-import {Navigate} from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { setUser } from "../../redux/reducers/user";
+import { useDispatch } from "react-redux";
 
 export const LoginView = ({ onLoggedIn }) => {
     //These states are created in order to "bind" the username and password to them
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -43,7 +47,7 @@ export const LoginView = ({ onLoggedIn }) => {
                     alert("No such user");
                 }
                 if (data.ok) {
-                    onLoggedIn(username);
+                    dispatch(setUser(username));
                 }
 
             })

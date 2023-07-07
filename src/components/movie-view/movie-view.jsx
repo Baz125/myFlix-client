@@ -4,8 +4,10 @@ import { Button, Col, Row, Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
+import { useSelector } from "react-redux";
 
-export const MovieView = ({ movies, user, token }) => {
+export const MovieView = ({ user, token }) => {
+    const movies = useSelector((state) => state.movies);
     const { movieId } = useParams();
     const storedUser = JSON.parse(localStorage.getItem("user"));
 

@@ -9,15 +9,19 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovies } from "../../redux/reducers/movies";
 
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
-    const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const movies = useSelector((state) => state.movies);
+    const user = useSelector((state) => state.user);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
+
+    const dispatch = useDispatch();
 
     const updateUser = user => {
         setUser(user);
@@ -51,7 +55,7 @@ export const MainView = () => {
                         releaseyear: doc.ReleaseYear
                     };
                 });
-                setMovies(moviesFromApi);
+                dispatch(setMovies(moviesFromApi));
                 
             })
             .catch(err => console.log("not authorized"))
@@ -71,7 +75,6 @@ export const MainView = () => {
             <NavigationBar
                 token={token}
                 onLoggedOut={() => {
-                    setUser(null);
                     setToken(null);
                     localStorage.clear();
                 }}        
@@ -123,7 +126,7 @@ export const MainView = () => {
                                         </Col>
                                 ) : (
                                     <Col md={8}>
-                                        <MovieView movies={movies} user={user} token={token} />
+                                        <MovieView user={user} token={token} />
                                     </Col>
                                 )}
                             </>

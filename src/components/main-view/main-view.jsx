@@ -16,7 +16,7 @@ import { setMovies } from "../../redux/reducers/movies";
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
-    const movies = useSelector((state) => state.movies);
+    const movies = useSelector((state) => state.movies.list);
     const user = useSelector((state) => state.user);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
@@ -27,11 +27,13 @@ export const MainView = () => {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
     } 
+
+    console.log("token:", token);
     
     useEffect(() => {
-        if (!token) {
-            return;
-        }
+        // if (!token) {
+        //     return;
+        // }
 
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },
@@ -62,6 +64,8 @@ export const MainView = () => {
             
     }, [token, user]);
 
+    console.log("token:", token);
+
     const updateFavorites = (movieId) => {
         // if the movie is already in the favorites list, remove it
         // if not, add it
@@ -74,10 +78,10 @@ export const MainView = () => {
         <BrowserRouter>
             <NavigationBar
                 token={token}
-                onLoggedOut={() => {
-                    setToken(null);
-                    localStorage.clear();
-                }}        
+                // onLoggedOut={() => {
+                //     setToken(null);
+                //     localStorage.clear();
+                // }}        
             />
             <Row className="justify-content-md-center px-5">
                 <Routes>
@@ -104,10 +108,9 @@ export const MainView = () => {
                                 ) : (
                                     <Col md={5}>
                                         <LoginView
-                                            onLoggedIn={(user, token) => {
-                                                setUser(user);
-                                                setToken(token);
-                                            }}
+                                            // onLoggedIn={(token) => {
+                                            //     setToken(token);
+                                            // }}
                                         />
                                     </Col>
                                 )}

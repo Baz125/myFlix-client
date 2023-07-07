@@ -7,7 +7,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { useSelector } from "react-redux";
 
 export const MovieView = ({ user, token }) => {
-    const movies = useSelector((state) => state.movies);
+    const movies = useSelector((state) => state.movies.list);
     const { movieId } = useParams();
     const storedUser = JSON.parse(localStorage.getItem("user"));
 

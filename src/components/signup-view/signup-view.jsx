@@ -62,10 +62,10 @@ export const SignupView = () => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        minLength="5"
+                        minLength="3"
                     />
                     <Form.Control.Feedback type="invalid">
-                        Username must be at least 5 characters.
+                        Username must be at least 3 characters.
                     </Form.Control.Feedback>
                 </Form.Group>
 

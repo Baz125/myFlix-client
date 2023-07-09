@@ -19,6 +19,7 @@ export const MainView = () => {
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
 
+
     const updateUser = user => {
         setUser(user);
         localStorage.setItem("user", JSON.stringify(user));
@@ -142,6 +143,7 @@ export const MainView = () => {
                                                 movies={movies}
                                                 user={user}
                                                 token={token}
+                                                updateUserMovies={updateFavorites}
                                                 onLoggedOut={() => {
                                                     setUser(null);
                                                     setToken(null);

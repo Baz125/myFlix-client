@@ -9,7 +9,7 @@ import accountIcon from "../../../assets/account-circle.svg";
 import './profile-view.scss';
 import moment from "moment/moment";
 
-export const ProfileView = ({user, token, onLoggedOut, movies, updateUser}) => {
+export const ProfileView = ({user, token, onLoggedOut, movies, updateUser, updateUserMovies}) => {
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);

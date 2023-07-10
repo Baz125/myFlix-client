@@ -1,25 +1,24 @@
-import { useEffect, useState } from "react";
-import "./movie-card.scss";
-import React from "react";
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import "./movie-card.scss";
 
 
 //Function Component
-export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClick, favoriteMovies, onFavoriteChange }) => {
+export const MovieCard = ({ movie, token, onFavoriteClick }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const [isFav, setIsFav] = useState(storedUser.FavoriteMovies.includes(movie.id))
 
 
-
     const handleAddFavorite = (event) => {
         event.preventDefault();
+        onFavoriteClick(movie.id);
 
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "PUT",
@@ -30,8 +29,6 @@ export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClic
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been added to your favorites!`);
-                updateUserMovies(movie.id);
-                onFavoriteClick(movie.id);
             } else {
                 alert("something didn't work")
             }
@@ -42,7 +39,9 @@ export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClic
 
     const handleRemoveFavorite = (event) => {
         event.preventDefault();
+        onFavoriteClick(movie.id);
 
+        
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "DELETE",
             headers: {
@@ -52,7 +51,6 @@ export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClic
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been removed from your favorites!`);
-                updateUserMovies(movie.id);
                 onFavoriteClick(movie.id);
             } else {
                 alert("something didn't work")
@@ -61,6 +59,8 @@ export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClic
             console.log(error);
         });
     };
+
+    if(!movie) return null;
 
     return (
         <Card className="h-100" text="light" bg="secondary">

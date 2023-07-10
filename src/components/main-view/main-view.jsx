@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import countdown from "../../../assets/countdown.gif";
+import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
-import countdown from "../../../assets/countdown.gif";
+import { ProfileView } from "../profile-view/profile-view";
+import { SignupView } from "../signup-view/signup-view";
 
 
 export const MainView = () => {
@@ -19,11 +19,6 @@ export const MainView = () => {
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [moviesFromApi, setMoviesFromApi] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
-
-    const handleFavoriteChange = (newValue) => {
-        setFavoriteMovies(newValue);
-      };
-
 
     const updateUser = user => {
         setUser(user);
@@ -72,9 +67,10 @@ export const MainView = () => {
     const updateFavorites = (movieId) => {
         // if the movie is already in the favorites list, remove it
         // if not, add it
-        const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
-        updateUser({ ...user, FavoriteMovies: updatedFavMovies });
-        console.log("updated favs: ", updatedFavMovies);
+
+        const updatedFavMovies = favoriteMovies.filter(m => m.id === movieId).length ? favoriteMovies.filter(movie => movie.id !== movieId) : favoriteMovies.concat(movies.find(m => m.id === movieId));
+
+        setFavoriteMovies(updatedFavMovies);    
     }
 
         //fetch favourite movies
@@ -148,7 +144,7 @@ export const MainView = () => {
                                                 user={user}
                                                 token={token}
                                                 favoriteMovies={favoriteMovies}
-                                                onFavoriteChange={handleFavoriteChange}
+                                                onFavoriteChange={updateFavorites}
                                             />
                                     </Col>
                                 )}
@@ -168,7 +164,6 @@ export const MainView = () => {
                                                 movies={movies}
                                                 user={user}
                                                 token={token}
-                                                updateUserMovies={updateFavorites}
                                                 onLoggedOut={() => {
                                                     setUser(null);
                                                     setToken(null);
@@ -176,7 +171,7 @@ export const MainView = () => {
                                                 }}
                                                 updateUser={updateUser}
                                                 favoriteMovies={favoriteMovies}
-                                                onFavoriteChange={handleFavoriteChange}
+                                                onFavoriteChange={updateFavorites}
                                             />
                                     </Col>
                                 )}

@@ -1,6 +1,7 @@
 import moment from "moment/moment";
-import { useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from "react-router-dom";
 import accountIcon from "../../../assets/account-circle.svg";
@@ -15,7 +16,20 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
     const [birthday, setBirthday] = useState(user.Birthday);
 
     const storedToken = localStorage.getItem("token");
+    
+    const updateFavorites = (movieId) => {
+        const updatedFavMovies = user.FavoriteMovies && user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
+        updateUser({ ...user, FavoriteMovies: updatedFavMovies });
+    }
 
+    //fetch favourite movies
+    useEffect(() => {
+        if (!token || !user?.FavoriteMovies) {
+            return;
+        }
+        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Ren: Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
+    }, [token,movies, user]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
+    
     //code for the modals
     const [showUpdateModal, setUpdateModal] = useState(false);
     const handleCloseUpdateModal = () => setUpdateModal(false);
@@ -100,24 +114,26 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                             className="card-image"
                         />
                     </div>
-                    <Card.Body>
-                        <Card.Title>Profile Information</Card.Title>
-                        <Card.Text>
-                            <div>
-                                <span>Username: </span>
-                                <span>{user.Username}</span>
-                            </div>
-                            <div>
-                                <span>Email: </span>
-                                <span>{user.Email}</span>
-                            </div>
-                            {user.Birthday && (
-                                <div>
-                                    <span>Birthday: </span>
-                                    <span>{moment(user.Birthday).format("Do MMM YYYY")}</span>
-                                </div>
-                            )}
+                <Card.Body>
+                    <Card.Title>Profile Information</Card.Title>   
+                    <Card.Text>
+                        <span>Username: </span>
+                        <span>{user.Username}</span>
                         </Card.Text>
+
+                        <Card.Text>
+                        <span>Email: </span>
+                        <span>{user.Email}</span>
+                        </Card.Text>
+                    
+                    <Card.Text>
+                    {user.Birthday && (
+                        <>
+                        <span>Birthday: </span>
+                        <span>{moment(user.Birthday).format("Do MMM YYYY")}</span>
+                        </>
+                    )}
+                    </Card.Text>
 
                         <Button onClick={handleShowUpdateModal} variant="info" style={{ cursor: "pointer" }} className="modalBtn">Update user information</Button>
 
@@ -215,12 +231,3 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
     );
 
 };
-
-// MovieView.propTypes = {
-//     movie: PropTypes.shape({
-//         featured: PropTypes.bool.isRequired,
-//         title: PropTypes.string.isRequired,
-//         image: PropTypes.string.isRequired,
-//         director: PropTypes.object
-//     }).isRequired,
-// };

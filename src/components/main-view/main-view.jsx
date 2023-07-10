@@ -1,60 +1,52 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
 import { setMovies } from "../../redux/reducers/movies";
+import { setToken, setUser } from "../../redux/reducers/user";
 import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view";
+import { SignupView } from "../signup-view/signup-view";
 
 
 export const MainView = () => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const storedToken = localStorage.getItem("token");
     const movies = useSelector((state) => state.movies.list);
-    const user = useSelector((state) => state.user);
-    const [token, setToken] = useState(storedToken ? storedToken : null);
-    const [moviesFromApi, setMoviesFromApi] = useState([]);
-    const [favoriteMovies, setFavoriteMovies] = useState([]);
+    const {user, token} = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
     const updateUser = user => {
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
+        dispatch(setUser(user));
     } 
 
     useEffect(() => {
-        if(token && storedUsername)
-        fetch("https://moviedb125.herokuapp.com/users/"+storedUsername, {
+        const username = localStorage.getItem('username');
+        if(!username || !token) return;
+
+        console.log('auth token', token)
+        fetch("https://moviedb125.herokuapp.com/users/"+username, {
             headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => response.json())
         .then((res) => {console.log(res); return res})
-        .then((data) => setUser(data))
-        .catch(err => console.log("problem with user fetch")) 
-    
-    }, []);
+        .then((data) => dispatch(setUser(data)))
 
+    }, [token])
 
-    
     useEffect(() => {
-        // if (!token) {
-        //     return;
-        // }
+        if (!token) {
+            return;
+        }
 
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log("movies from api:", data)
-                return data
-            })
             .then((data) => {
                 const moviesFromApi = data.map((doc) => {
                     return {
@@ -70,13 +62,13 @@ export const MainView = () => {
                     };
                 });
                 dispatch(setMovies(moviesFromApi));
+                console.log('dispatch movies', moviesFromApi)
+
                 
             })
-            .catch(err => console.log("not authorized"))   
-    
-    }, [token, user]);
-
-    console.log("token:", token);
+            .catch(err => console.log("not authorized"))
+            
+    }, [token]);
 
     const updateFavorites = (movieId) => {
         const updatedFavMovies = favoriteMovies.filter(m => m.id === movieId).length ? favoriteMovies.filter(movie => movie.id !== movieId) : favoriteMovies.concat(movies.find(m => m.id === movieId));
@@ -125,11 +117,7 @@ export const MainView = () => {
                                     <Navigate to="/" />
                                 ) : (
                                     <Col md={5}>
-                                        <LoginView
-                                            // onLoggedIn={(token) => {
-                                            //     setToken(token);
-                                            // }}
-                                        />
+                                        <LoginView/>
                                     </Col>
                                 )}
                             </>
@@ -141,10 +129,6 @@ export const MainView = () => {
                             <>
                                 {!token ? (
                                     <Navigate to="/login" replace />
-                                ) : movies.length === 0 ? (
-                                        <Col>
-                                        <Image src={countdown} fluid />
-                                        </Col>
                                 ) : (
                                     <Col md={8}>
                                         <MovieView user={user} token={token} />
@@ -167,8 +151,8 @@ export const MainView = () => {
                                                 user={user}
                                                 token={token}
                                                 onLoggedOut={() => {
-                                                    setUser(null);
-                                                    setToken(null);
+                                                    dispatch(setUser(null))
+                                                    dispatch(setToken(null))
                                                     localStorage.clear();
                                                 }}
                                                 updateUser={updateUser}

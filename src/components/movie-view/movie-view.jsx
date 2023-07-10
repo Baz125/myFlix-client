@@ -1,7 +1,9 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import countdown from "../../../assets/countdown.gif";
 import { MovieCard } from "../movie-card/movie-card";
+import "./movie-view.scss";
 
 export const MovieView = ({ user, token }) => {
     const movies = useSelector((state) => state.movies.list);
@@ -11,6 +13,8 @@ export const MovieView = ({ user, token }) => {
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
 
+    console.log(movie)
+    if(!movie) return  <img src={countdown} fluid />
     return (
         <Container>
             <Row>

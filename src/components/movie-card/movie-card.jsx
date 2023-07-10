@@ -10,11 +10,13 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
 
 //Function Component
-export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
+export const MovieCard = ({ movie, user, token, updateUserMovies, onFavoriteClick, favoriteMovies, onFavoriteChange }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const [isFav, setIsFav] = useState(storedUser.FavoriteMovies.includes(movie.id))
+
+
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
@@ -29,6 +31,7 @@ export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
             if (response.ok) {
                 alert(`${movie.title} has been added to your favorites!`);
                 updateUserMovies(movie.id);
+                onFavoriteClick(movie.id);
             } else {
                 alert("something didn't work")
             }
@@ -50,6 +53,7 @@ export const MovieCard = ({ movie, user, token, updateUserMovies }) => {
             if (response.ok) {
                 alert(`${movie.title} has been removed from your favorites!`);
                 updateUserMovies(movie.id);
+                onFavoriteClick(movie.id);
             } else {
                 alert("something didn't work")
             }

@@ -9,13 +9,18 @@ import accountIcon from "../../../assets/account-circle.svg";
 import './profile-view.scss';
 import moment from "moment/moment";
 
-export const ProfileView = ({user, token, onLoggedOut, movies, updateUser, updateUserMovies}) => {
+export const ProfileView = ({user, token, onLoggedOut, movies, updateUser, favoriteMovies, onFavoriteChange}) => {
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(user.Birthday);
-    const [favoriteMovies, setFavoriteMovies] = useState([]); // Ren: Moved value set to useEffect.
+    //const [favoriteMovies, setFavoriteMovies] = useState([]); // Ren: Moved value set to useEffect. (remove when lifted)
+
+    const handleFavoriteClick = () => {
+        const newValue = "taken from click somehow";
+        onFavoriteChange(newValue);
+    }
 
     const storedToken = localStorage.getItem("token");
     
@@ -24,13 +29,13 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser, updat
         updateUser({ ...user, FavoriteMovies: updatedFavMovies });
     }
 
-    //fetch favourite movies
-    useEffect(() => {
-        if (!token) {
-            return;
-        }
-        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Ren: Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
-    }, [token,movies]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
+    //fetch favourite movies (remove when lifted)
+    // useEffect(() => {
+    //     if (!token) {
+    //         return;
+    //     }
+    //     setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Ren: Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
+    // }, [token,movies]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
     
     //code for the modals
     const [showUpdateModal, setUpdateModal] = useState(false);
@@ -150,6 +155,7 @@ export const ProfileView = ({user, token, onLoggedOut, movies, updateUser, updat
                             movie={movie}
                             token={token}
                             updateUserMovies={updateFavorites}
+                            onFavoriteClick={handleFavoriteClick}
                                 />
                             </Col>
                         ))}

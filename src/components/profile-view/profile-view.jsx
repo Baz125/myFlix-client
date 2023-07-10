@@ -24,6 +24,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
     const [showDeleteModal, setDeleteModal] = useState(false);
     const handleCloseDeleteModal = () => setDeleteModal(false);
     const handleShowDeleteModal = () => setDeleteModal(true);
+    console.log("favoriteMovies: ", favoriteMovies)
 
 
     const handleSubmit = (event) => {
@@ -80,6 +81,8 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
             }
         });
     }
+
+    console.log("favoriteMovies: ", favoriteMovies)
 
     return (
         <Container>

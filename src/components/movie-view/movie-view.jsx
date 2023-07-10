@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
-export const MovieView = ({ movies, user, token, favoriteMovies, updateUserMovies }) => {
+export const MovieView = ({ movies, user, token, updateFavorites }) => {
     const { movieId } = useParams();
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -13,12 +13,7 @@ export const MovieView = ({ movies, user, token, favoriteMovies, updateUserMovie
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
 
-    const handleFavoriteClick = () => {
-        const newValue = "taken from click somehow";
-        onFavoriteChange(newValue);
-    }
-
-    //brought in from profile-view in an attamp to fix the issue of the favorites not updating the UI from moive-view
+    // brought in from profile-view in an attamp to fix the issue of the favorites not updating the UI from moive-view
     const updateFavorites = (movieId) => {
         const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
         updateUser({ ...user, FavoriteMovies: updatedFavMovies });
@@ -60,8 +55,7 @@ export const MovieView = ({ movies, user, token, favoriteMovies, updateUserMovie
                             movie={movie}
                             user={user}
                             token={token}
-                            updateUserMovies={updateFavorites}
-                            onFavoriteClick={handleFavoriteClick}
+                            onFavoriteClick={updateFavorites}
                         />
                     </Col>
                 ))}

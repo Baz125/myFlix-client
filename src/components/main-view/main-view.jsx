@@ -33,7 +33,6 @@ export const MainView = () => {
         if (!token) {
             return;
         }
-
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -59,12 +58,20 @@ export const MainView = () => {
                 setMovies(moviesFromApi);
                 
             })
-            .catch(err => console.log("not authorized"))
-            
+            .catch(err => console.log("not authorized"))   
+        
+            fetch("https://moviedb125.herokuapp.com/users/"+username, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => response.json())
+            .then((res) => {console.log(res); return res})
+            .then((data) => setUser(data))
+            .catch(err => console.log("problem with user fetch")) 
+        
     }, [token, user]);
 
-    //updates the list of favorite movies within the user state
-    const updateFavorites = (movieId) => {
+        //updates the list of favorite movies within the user state
+        const updateFavorites = (movieId) => {
         // if the movie is already in the favorites list, remove it
         // if not, add it
 
@@ -144,7 +151,7 @@ export const MainView = () => {
                                                 user={user}
                                                 token={token}
                                                 favoriteMovies={favoriteMovies}
-                                                onFavoriteChange={updateFavorites}
+                                                updateFavorites={updateFavorites}
                                             />
                                     </Col>
                                 )}
@@ -194,7 +201,12 @@ export const MainView = () => {
                                                 <h1 className="justify-content-md-center" text="light" >Click on a movie to learn more!</h1>
                                         {movies.map((movie) => (      
                                             <Col className="mb-4" key={movie.id} md={3} text="light">
-                                                <MovieCard onClick movie={movie} user={user} token={token} updateUserMovies={updateFavorites}/>
+                                                <MovieCard onClick
+                                                    movie={movie}
+                                                    user={user}
+                                                    token={token}
+                                                    updateUserMovies={updateFavorites}//this is going to have to change
+                                                />
                                             </Col>
                                         ))}
                                     </>

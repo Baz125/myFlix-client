@@ -5,16 +5,16 @@ import countdown from "../../../assets/countdown.gif";
 import { MovieCard } from "../movie-card/movie-card";
 import "./movie-view.scss";
 
-export const MovieView = ({ user, token }) => {
-    const movies = useSelector((state) => state.movies.list);
+export const MovieView = () => {
+    const {movies} = useSelector((state) => state.movies);
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);
+    
+    if(!movie) return  <img src={countdown} fluid />
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
 
-    console.log(movie)
-    if(!movie) return  <img src={countdown} fluid />
     return (
         <Container>
             <Row>
@@ -47,11 +47,7 @@ export const MovieView = ({ user, token }) => {
                 {similarMovies.map((movie) => (
                     <Col text="light" className="mb-4" key={movie.id} md={4}>
                         <MovieCard
-                            style={{ border: "1px solid green" }}
                             movie={movie}
-                            token={token}
-                            isFav={favoriteMovies.find(fav => fav.id === movie.id)}
-                            updateFavorites={updateFavorites}
                         />
                     </Col>
                 ))}

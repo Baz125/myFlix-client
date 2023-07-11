@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
-import { setMovies } from "../../redux/reducers/movies";
+import { setFavoriteMovies, setMovies } from "../../redux/reducers/movies";
 import { setToken, setUser } from "../../redux/reducers/user";
 import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
@@ -15,7 +15,7 @@ import { SignupView } from "../signup-view/signup-view";
 
 
 export const MainView = () => {
-    const movies = useSelector((state) => state.movies.list);
+    const {movies} = useSelector((state) => state.movies);
     const {user, token} = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
@@ -70,28 +70,19 @@ export const MainView = () => {
             
     }, [token]);
 
-    const updateFavorites = (movieId) => {
-        const updatedFavMovies = favoriteMovies.filter(m => m.id === movieId).length ? favoriteMovies.filter(movie => movie.id !== movieId) : favoriteMovies.concat(movies.find(m => m.id === movieId));
-        setFavoriteMovies(updatedFavMovies);    
-    }
-
     //sets favoriteMovies state, triggered any time token or movies changes.
     useEffect(() => {
-        if (!token) {
+        if (!token || !movies?.length || !user.FavoriteMovies) {
             return;
         }
-        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
-    }, [token,movies]); // Listening for movies props, resolved FavMovies not loaded sometimes issue.
+        dispatch(setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id)))); // Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
+    }, [token, movies, user]); // Listening for movies props, resolved FavMovies not loaded sometimes issue.
 
     
     return (    
         <BrowserRouter>
             <NavigationBar
-                token={token}
-                // onLoggedOut={() => {
-                //     setToken(null);
-                //     localStorage.clear();
-                // }}        
+                token={token}    
             />
             <Row className="justify-content-md-center px-5">
                 <Routes>
@@ -147,17 +138,11 @@ export const MainView = () => {
                                 ) : (
                                     <Col>
                                             <ProfileView
-                                                movies={movies}
-                                                user={user}
-                                                token={token}
                                                 onLoggedOut={() => {
                                                     dispatch(setUser(null))
                                                     dispatch(setToken(null))
                                                     localStorage.clear();
                                                 }}
-                                                updateUser={updateUser}
-                                                favoriteMovies={favoriteMovies}
-                                                updateFavorites={updateFavorites}
                                             />
                                     </Col>
                                 )}
@@ -170,21 +155,17 @@ export const MainView = () => {
                             <>
                                 {!token ? (
                                     <Navigate to="/login" replace />
-                                ) : movies.length === 0 ? (
+                                ) : !movies?.length ? (
                                         <Col>
                                          <img src={countdown} />
                                         </Col>
                                     ) : (
-                                            
                                             <>
                                                 <h1 className="justify-content-md-center" text="light" >Click on a movie to learn more!</h1>
                                         {movies.map((movie) => (      
                                             <Col className="mb-4" key={movie.id} md={3} text="light">
-                                                <MovieCard onClick
+                                                <MovieCard 
                                                     movie={movie}
-                                                    token={token}
-                                                    isFav={favoriteMovies.find(fav => fav.id === movie.id)}
-                                                    updateFavorites={updateFavorites}
                                                 />
                                             </Col>
                                         ))}

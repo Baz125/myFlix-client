@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
@@ -10,14 +11,14 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
 import { SignupView } from "../signup-view/signup-view";
 
-
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
+    const storedUsername = localStorage.getItem("username");
+
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
-    const [moviesFromApi, setMoviesFromApi] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
 
     const updateUser = user => {
@@ -26,8 +27,17 @@ export const MainView = () => {
     } 
 
     useEffect(() => {
-        console.log("user: ", user);
-    }, [user]);
+        if(token && storedUsername)
+        fetch("https://moviedb125.herokuapp.com/users/"+storedUsername, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => response.json())
+        .then((res) => {console.log(res); return res})
+        .then((data) => setUser(data))
+        .catch(err => console.log("problem with user fetch:", err)) 
+    
+    }, []);
+
     
     useEffect(() => {
         if (!token) {
@@ -60,33 +70,21 @@ export const MainView = () => {
             })
             .catch(err => console.log("not authorized"))   
         
-            fetch("https://moviedb125.herokuapp.com/users/"+username, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => response.json())
-            .then((res) => {console.log(res); return res})
-            .then((data) => setUser(data))
-            .catch(err => console.log("problem with user fetch")) 
-        
     }, [token, user]);
 
-        //updates the list of favorite movies within the user state
-        const updateFavorites = (movieId) => {
-        // if the movie is already in the favorites list, remove it
-        // if not, add it
-
+    //updates the favoriteMovies state (triggered from MovieCard click): if the movie is already in the favorites list, remove it; if not, add it
+    const updateFavorites = (movieId) => {
         const updatedFavMovies = favoriteMovies.filter(m => m.id === movieId).length ? favoriteMovies.filter(movie => movie.id !== movieId) : favoriteMovies.concat(movies.find(m => m.id === movieId));
-
         setFavoriteMovies(updatedFavMovies);    
     }
 
-        //fetch favourite movies
-        useEffect(() => {
-            if (!token) {
-                return;
-            }
-            setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Ren: Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
-        }, [token,movies]); // Ren: Listening for movies props, resolved FavMovies not loaded sometimes issue.
+    //sets favoriteMovies state, triggered any time token or movies changes.
+    useEffect(() => {
+        if (!token) {
+            return;
+        }
+        setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id))); // Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
+    }, [token,movies]); // Listening for movies props, resolved FavMovies not loaded sometimes issue.
 
     
     return (    
@@ -148,7 +146,6 @@ export const MainView = () => {
                                     <Col md={8}>
                                         <MovieView
                                                 movies={movies}
-                                                user={user}
                                                 token={token}
                                                 favoriteMovies={favoriteMovies}
                                                 updateFavorites={updateFavorites}
@@ -178,7 +175,7 @@ export const MainView = () => {
                                                 }}
                                                 updateUser={updateUser}
                                                 favoriteMovies={favoriteMovies}
-                                                onFavoriteChange={updateFavorites}
+                                                updateFavorites={updateFavorites}
                                             />
                                     </Col>
                                 )}
@@ -205,7 +202,8 @@ export const MainView = () => {
                                                     movie={movie}
                                                     user={user}
                                                     token={token}
-                                                    updateUserMovies={updateFavorites}//this is going to have to change
+                                                    favoriteMovies={favoriteMovies}
+                                                    updateFavorites={updateFavorites}
                                                 />
                                             </Col>
                                         ))}

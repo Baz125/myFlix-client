@@ -2,23 +2,21 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./movie-card.scss";
 
 
 //Function Component
-export const MovieCard = ({ movie, token, onFavoriteClick }) => {
+export const MovieCard = ({ movie, token, isFav = false, updateFavorites }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    const [isFav, setIsFav] = useState(storedUser.FavoriteMovies.includes(movie.id))
-
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
-        onFavoriteClick(movie.id);
+        updateFavorites(movie.id);
 
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "PUT",
@@ -39,7 +37,7 @@ export const MovieCard = ({ movie, token, onFavoriteClick }) => {
 
     const handleRemoveFavorite = (event) => {
         event.preventDefault();
-        onFavoriteClick(movie.id);
+        updateFavorites(movie.id);
 
         
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
@@ -51,7 +49,7 @@ export const MovieCard = ({ movie, token, onFavoriteClick }) => {
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been removed from your favorites!`);
-                onFavoriteClick(movie.id);
+            
             } else {
                 alert("something didn't work")
             }
@@ -67,14 +65,14 @@ export const MovieCard = ({ movie, token, onFavoriteClick }) => {
             <div className="card-content">  
                 <Card.Body>    
                     <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
-                    <Card.Img variant="top" src={movie.image} />
-                    <Card.Title>{movie.title}</Card.Title>
-                    <div className="card-text-container">
-                        <Card.Text>{movie.actors.join(" & ")}</Card.Text>
+                        <Card.Img variant="top" src={movie.image} />
+                        <Card.Title>{movie.title}</Card.Title>
+                        <div className="card-text-container">
+                            <Card.Text>{movie.actors.join(" & ")}</Card.Text>
                         </div>
                     </div>
                     <div className="button-container">
-                        {/* Ren: Added condition to show fav buttons */}
+                        {/* condition to show fav buttons */}
                         {!isFav ?
                             (<Button onClick={handleAddFavorite} variant="info">
                             <FontAwesomeIcon icon={faHeartRegular}  />

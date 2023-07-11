@@ -7,7 +7,7 @@ import accountIcon from "../../../assets/account-circle.svg";
 import { MovieCard } from "../movie-card/movie-card";
 import './profile-view.scss';
 
-export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favoriteMovies = [], onFavoriteChange }) => {
+export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favoriteMovies = [], updateFavorites }) => {
 
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
@@ -136,7 +136,8 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                                 <MovieCard
                                     movie={movie}
                                     token={token}
-                                    onFavoriteClick={onFavoriteChange}
+                                    isFav
+                                    updateFavorites={updateFavorites}
                                 />
                             </Col>
                         ))}

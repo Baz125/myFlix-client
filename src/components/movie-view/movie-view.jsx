@@ -3,6 +3,7 @@ import { Button, Col, Row, Container } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 import "./movie-view.scss";
+import "./movie-view.scss";
 
 export const MovieView = ({ movies, token, updateFavorites, favoriteMovies }) => {
     const { movieId } = useParams();

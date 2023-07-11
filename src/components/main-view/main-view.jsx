@@ -15,10 +15,11 @@ export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
     const storedUsername = localStorage.getItem("username");
-
+    
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
+    const [moviesFromApi, setMoviesFromApi] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
 
     const updateUser = user => {
@@ -34,15 +35,17 @@ export const MainView = () => {
         .then((response) => response.json())
         .then((res) => {console.log(res); return res})
         .then((data) => setUser(data))
-        .catch(err => console.log("problem with user fetch:", err)) 
+        .catch(err => console.log("problem with user fetch")) 
     
     }, []);
+
 
     
     useEffect(() => {
         if (!token) {
             return;
         }
+
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -69,7 +72,7 @@ export const MainView = () => {
                 
             })
             .catch(err => console.log("not authorized"))   
-        
+    
     }, [token, user]);
 
     //updates the favoriteMovies state (triggered from MovieCard click): if the movie is already in the favorites list, remove it; if not, add it
@@ -200,9 +203,8 @@ export const MainView = () => {
                                             <Col className="mb-4" key={movie.id} md={3} text="light">
                                                 <MovieCard onClick
                                                     movie={movie}
-                                                    user={user}
                                                     token={token}
-                                                    favoriteMovies={favoriteMovies}
+                                                    isFav={favoriteMovies.find(fav => fav.id === movie.id)}
                                                     updateFavorites={updateFavorites}
                                                 />
                                             </Col>

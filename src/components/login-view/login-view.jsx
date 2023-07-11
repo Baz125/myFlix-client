@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap"; 
+import {Navigate} from "react-router-dom";
 
 export const LoginView = ({ onLoggedIn }) => {
     //These states are created in order to "bind" the username and password to them
@@ -24,9 +25,10 @@ export const LoginView = ({ onLoggedIn }) => {
             .then(response => {
                 console.log(response)
                 if (response.status !== 200) {
-                   throw new Error(response.body.message)
+                    alert ("Username or password is incorrect")
+                    throw new Error(response.body.message)
                 }
-                return response; 
+                return response;
             })
             .then((response) => response.json())
             .then((data) => {
@@ -34,31 +36,26 @@ export const LoginView = ({ onLoggedIn }) => {
                 if (data.user) {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("username", data.user.Username);
                     onLoggedIn(data.user, data.token);
+                    return <Navigate to="/" />;
                 } else {
                     alert("No such user");
                 }
                 if (data.ok) {
                     onLoggedIn(username);
                 }
-                //I don't know why this was here, but it was causeing a login failed error on successful login
-                // } else {
-                //     alert("Login failed");
-                // }
 
             })
             .catch((e) => {
                 console.log("Something went wrong", e);
-            })
-        
-
-        
+            });
     };
 
-    return (
-        <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="loginUsername">
-                <Form.Label>Username: </Form.Label>
+        return (
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="loginUsername">
+                    <Form.Label>Username: </Form.Label>
                     <Form.Control
                         type="text"
                         value={username}
@@ -66,10 +63,10 @@ export const LoginView = ({ onLoggedIn }) => {
                         required
                         minLength="3"
                     />
-            </Form.Group>
+                </Form.Group>
             
-            <Form.Group controlId="loginPassword">
-                <Form.Label>Password: </Form.Label>
+                <Form.Group controlId="loginPassword">
+                    <Form.Label>Password: </Form.Label>
                     <Form.Control
                         type="password"
                         value={password}
@@ -79,6 +76,6 @@ export const LoginView = ({ onLoggedIn }) => {
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">Submit</Button>
-        </Form>
-    );
+            </Form>
+        );
 };

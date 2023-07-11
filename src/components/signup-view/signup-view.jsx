@@ -35,11 +35,11 @@ export const SignupView = () => {
     }
     return (
         <>
-            <h1>Have you not yet signed up?</h1>
+            <h1>Sign up for a free account</h1>
             <p>Give us some info about yourself below, and we'll create you a free account</p>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formUsername">
-                <Form.Label>Username:</Form.Label>
+                    <Form.Label>Username:</Form.Label>
                     <Form.Control
                         type="text"
                         value={username}
@@ -50,18 +50,17 @@ export const SignupView = () => {
                 </Form.Group>
 
                 <Form.Group controlId="formPassword">
-                <Form.Label>Password: </Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        minLength="3"
-                    />
+                    <Form.Label>Password: </Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            minLength="3"
+                        />
                 </Form.Group>
-
                 <Form.Group>
-                <Form.Label>Email: </Form.Label>
+                    <Form.Label>Email: </Form.Label>
                     <Form.Control
                         type="email"
                         value={email}
@@ -71,7 +70,7 @@ export const SignupView = () => {
                 </Form.Group>
 
                 <Form.Group>
-                <Form.Label>Birthday: </Form.Label>
+                    <Form.Label>Birthday: </Form.Label>
                     <Form.Control
                         type="date"
                         value={birthday}

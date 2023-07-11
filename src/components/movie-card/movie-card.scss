@@ -1,0 +1,29 @@
+.Card.Body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .card-text-container {
+    flex-grow: 1;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .card-img-top {
+    height: fit-content !important; // Ren: Some movie image like Shaun of the Dead are shorter than others, so tried fixing it. No Luck!
+  }
+
+  .card-title {
+    text-align: center !important;
+    margin-top: 5px !important;
+  }

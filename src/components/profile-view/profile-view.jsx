@@ -136,6 +136,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                                 <MovieCard
                                     movie={movie}
                                     token={token}
+                                    isFav
                                     onFavoriteClick={onFavoriteChange}
                                 />
                             </Col>

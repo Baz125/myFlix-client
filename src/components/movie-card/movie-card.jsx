@@ -2,19 +2,17 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./movie-card.scss";
 
 
 //Function Component
-export const MovieCard = ({ movie, token, onFavoriteClick }) => {
+export const MovieCard = ({ movie, token, isFav = false, onFavoriteClick }) => {
     const navigate = useNavigate();
     const handleCardClick = () => navigate(`/movies/${movie.id}`);
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    const [isFav, setIsFav] = useState(storedUser.FavoriteMovies.includes(movie.id))
-
 
     const handleAddFavorite = (event) => {
         event.preventDefault();
@@ -40,7 +38,7 @@ export const MovieCard = ({ movie, token, onFavoriteClick }) => {
     const handleRemoveFavorite = (event) => {
         event.preventDefault();
         onFavoriteClick(movie.id);
-
+        
         
         fetch(`https://moviedb125.herokuapp.com/users/${storedUser.Username}/movies/${encodeURIComponent(movie.id)}`, {
             method: "DELETE",
@@ -51,7 +49,6 @@ export const MovieCard = ({ movie, token, onFavoriteClick }) => {
         }).then((response) => {
             if (response.ok) {
                 alert(`${movie.title} has been removed from your favorites!`);
-                onFavoriteClick(movie.id);
             } else {
                 alert("something didn't work")
             }

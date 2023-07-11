@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
@@ -10,14 +11,14 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
 import { SignupView } from "../signup-view/signup-view";
 
-
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
+    const storedUsername = localStorage.getItem("username");
+    
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
-    const [moviesFromApi, setMoviesFromApi] = useState([]);
     const [favoriteMovies, setFavoriteMovies] = useState([]);
 
     const updateUser = user => {
@@ -26,13 +27,24 @@ export const MainView = () => {
     } 
 
     useEffect(() => {
-        console.log("user: ", user);
-    }, [user]);
+        if(token && storedUsername)
+        fetch("https://moviedb125.herokuapp.com/users/"+storedUsername, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => response.json())
+        .then((res) => {console.log(res); return res})
+        .then((data) => setUser(data))
+        .catch(err => console.log("problem with user fetch")) 
+    
+    }, []);
+
+
     
     useEffect(() => {
         if (!token) {
             return;
         }
+
         fetch("https://moviedb125.herokuapp.com/movies", {
             headers: { Authorization: `Bearer ${token}` },
         })
@@ -59,15 +71,7 @@ export const MainView = () => {
                 
             })
             .catch(err => console.log("not authorized"))   
-        
-            fetch("https://moviedb125.herokuapp.com/users/"+username, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => response.json())
-            .then((res) => {console.log(res); return res})
-            .then((data) => setUser(data))
-            .catch(err => console.log("problem with user fetch")) 
-        
+    
     }, [token, user]);
 
         //updates the list of favorite movies within the user state
@@ -148,7 +152,6 @@ export const MainView = () => {
                                     <Col md={8}>
                                         <MovieView
                                                 movies={movies}
-                                                user={user}
                                                 token={token}
                                                 favoriteMovies={favoriteMovies}
                                                 updateFavorites={updateFavorites}
@@ -203,9 +206,9 @@ export const MainView = () => {
                                             <Col className="mb-4" key={movie.id} md={3} text="light">
                                                 <MovieCard onClick
                                                     movie={movie}
-                                                    user={user}
                                                     token={token}
-                                                    updateUserMovies={updateFavorites}//this is going to have to change
+                                                    isFav={favoriteMovies.find(fav => fav.id === movie.id)}
+                                                    onFavoriteClick={updateFavorites}
                                                 />
                                             </Col>
                                         ))}

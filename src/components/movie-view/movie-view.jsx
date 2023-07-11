@@ -1,23 +1,14 @@
-import PropTypes from "prop-types";
-import "./movie-view.scss";
-import { Button, Col, Row, Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
+import "./movie-view.scss";
 
-export const MovieView = ({ movies, user, token, updateFavorites }) => {
+export const MovieView = ({ movies, token, favoriteMovies, updateFavorites }) => {
     const { movieId } = useParams();
-    const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const movie = movies.find((m) => m.id === movieId);
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
-
-    // brought in from profile-view in an attamp to fix the issue of the favorites not updating the UI from moive-view
-    const updateFavorites = (movieId) => {
-        const updatedFavMovies = user.FavoriteMovies.includes(movieId) ? user.FavoriteMovies.filter(id => id !== movieId) : [...user.FavoriteMovies, movieId];
-        updateUser({ ...user, FavoriteMovies: updatedFavMovies });
-    }
 
     return (
         <Container>
@@ -53,8 +44,8 @@ export const MovieView = ({ movies, user, token, updateFavorites }) => {
                         <MovieCard
                             style={{ border: "1px solid green" }}
                             movie={movie}
-                            user={user}
                             token={token}
+                            isFav={favoriteMovies.find(fav => fav.id === movie.id)}
                             onFavoriteClick={updateFavorites}
                         />
                     </Col>

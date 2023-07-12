@@ -32,7 +32,8 @@ export const {
   setMovies,
   setFavoriteMovies,
   addFavoriteMovie,
-  removeFavoriteMovie
+  removeFavoriteMovie,
+  setFilter
 } = moviesSlice.actions;
 
 export default moviesSlice.reducer;

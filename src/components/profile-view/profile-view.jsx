@@ -70,7 +70,7 @@ export const ProfileView = ({onLoggedOut}) => {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${storedToken}`
+                "Authorization": `Bearer ${token}`
             },
 
         }).then((response) => {

@@ -13,7 +13,7 @@ import './profile-view.scss';
 export const ProfileView = ({onLoggedOut}) => {
 
     const {user, token} = useSelector((state) => state.user);
-    const {favoriteMovies} = useSelector((state) => state.movies.movies);
+    const favoriteMovies = useSelector((state) => state.movies.favoriteMovies);
     const dispatch = useDispatch();
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
@@ -162,6 +162,7 @@ export const ProfileView = ({onLoggedOut}) => {
                             onChange={(e) => setUsername(e.target.value)}
                             required
                             minLength="3"
+                            style={{ backgroundColor: '#696969' }}
                         />
                     </Form.Group>
 
@@ -172,6 +173,7 @@ export const ProfileView = ({onLoggedOut}) => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            style={{ backgroundColor: '#696969' }}
                         />
                     </Form.Group>
 
@@ -181,6 +183,7 @@ export const ProfileView = ({onLoggedOut}) => {
                             type="date"
                             value={moment(birthday).format("YYYY-MM-DD")}
                             onChange={(e) => setBirthday(e.target.value)}
+                            style={{ backgroundColor: '#696969' }}
                             required
                         />
                     </Form.Group>

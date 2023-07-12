@@ -13,6 +13,7 @@ export const MoviesFilter = () => {
             placeholder="Search..."
             value={filter}
             onChange={(e) => dispatch(setFilter(e.target.value))}
+            style={{ backgroundColor: '#696969', color: 'black', marginBottom: '30px', borderColor: '#D9CB9E' }}
         />
     );
 };

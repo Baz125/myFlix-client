@@ -72,7 +72,7 @@ export const LoginView = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        minLength="6"
+                        minLength="3"
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">Submit</Button>

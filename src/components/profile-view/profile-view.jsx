@@ -13,7 +13,7 @@ import './profile-view.scss';
 export const ProfileView = ({onLoggedOut}) => {
 
     const {user, token} = useSelector((state) => state.user);
-    const {favoriteMovies} = useSelector((state) => state.movies);
+    const {favoriteMovies} = useSelector((state) => state.movies.movies);
     const dispatch = useDispatch();
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);

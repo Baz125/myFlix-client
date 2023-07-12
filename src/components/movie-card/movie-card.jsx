@@ -13,7 +13,7 @@ import "./movie-card.scss";
 export const MovieCard = ({ movie }) => {
     const navigate = useNavigate();
     const {user, token} = useSelector((state) => state.user);
-    const {favoriteMovies} = useSelector((state) => state.movies);
+    const {favoriteMovies} = useSelector((state) => state.movies.movies);
     const dispatch = useDispatch();
 
     const isFav = !!favoriteMovies?.length && favoriteMovies.find(fav => fav.id === movie.id);

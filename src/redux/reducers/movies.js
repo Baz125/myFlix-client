@@ -4,7 +4,8 @@ const moviesSlice = createSlice({
   name: "movies",
   initialState: {
     movies: [],
-    favoriteMovies: []
+    favoriteMovies: [],
+    filter: ""
   },
   reducers: {
     setMovies: (state, action) => {
@@ -17,11 +18,21 @@ const moviesSlice = createSlice({
       state.favoriteMovies = state.favoriteMovies.concat(action.payload);
     },
     removeFavoriteMovie: (state, action) => {
-      state.favoriteMovies = state.favoriteMovies.filter(movie => movie.id !== action.payload.id)
+      state.favoriteMovies = state.favoriteMovies.filter(
+        (movie) => movie.id !== action.payload.id
+      );
+    },
+    setFilter: (state, action) => {
+      state.filter = action.payload;
     }
   }
 });
 
-export const { setMovies, setFavoriteMovies, addFavoriteMovie, removeFavoriteMovie } = moviesSlice.actions;
+export const {
+  setMovies,
+  setFavoriteMovies,
+  addFavoriteMovie,
+  removeFavoriteMovie
+} = moviesSlice.actions;
 
 export default moviesSlice.reducer;

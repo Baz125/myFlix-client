@@ -12,10 +12,11 @@ import { MovieView } from "../movie-view/movie-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
 import { SignupView } from "../signup-view/signup-view";
+import { MoviesList } from "../movies-list/movies-list";
 
 
 export const MainView = () => {
-    const {movies} = useSelector((state) => state.movies);
+    const {movies} = useSelector((state) => state.movies.movies);
     const {user, token} = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
@@ -155,22 +156,8 @@ export const MainView = () => {
                             <>
                                 {!token ? (
                                     <Navigate to="/login" replace />
-                                ) : !movies?.length ? (
-                                        <Col>
-                                         <img src={countdown} />
-                                        </Col>
-                                    ) : (
-                                            <>
-                                                <h1 className="justify-content-md-center" text="light" >Click on a movie to learn more!</h1>
-                                        {movies.map((movie) => (      
-                                            <Col className="mb-4" key={movie.id} md={3} text="light">
-                                                <MovieCard 
-                                                    movie={movie}
-                                                />
-                                            </Col>
-                                        ))}
-                                    </>
-                                )}
+                                ) : <MoviesList />
+                                }
                             </>
                         }
                     />

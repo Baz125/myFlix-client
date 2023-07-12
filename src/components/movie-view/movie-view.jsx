@@ -6,7 +6,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import "./movie-view.scss";
 
 export const MovieView = () => {
-    const {movies} = useSelector((state) => state.movies);
+    const {movies} = useSelector((state) => state.movies.movies);
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);

@@ -7,7 +7,6 @@ import "./movie-view.scss";
 
 export const MovieView = () => {
     const movies = useSelector((state) => state.movies.movies);
-    console.log("movies: ", movies);
     const { movieId } = useParams();
     
 

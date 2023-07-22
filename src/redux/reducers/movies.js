@@ -9,7 +9,6 @@ const moviesSlice = createSlice({
   },
   reducers: {
     setMovies: (state, action) => {
-      console.log(action.payload);
       state.movies = action.payload;
     },
     setFavoriteMovies: (state, action) => {

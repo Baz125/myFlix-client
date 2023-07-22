@@ -7,7 +7,6 @@ import countdown from "../../../assets/countdown.gif";
 import { setFavoriteMovies, setMovies } from "../../redux/reducers/movies";
 import { setToken, setUser } from "../../redux/reducers/user";
 import { LoginView } from "../login-view/login-view";
-import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
@@ -29,12 +28,10 @@ export const MainView = () => {
         const username = localStorage.getItem('username');
         if(!username || !token) return;
 
-        console.log('auth token', token)
         fetch("https://moviedb125.herokuapp.com/users/"+username, {
             headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => response.json())
-        .then((res) => {console.log(res); return res})
         .then((data) => dispatch(setUser(data)))
 
     }, [token])
@@ -63,7 +60,6 @@ export const MainView = () => {
                     };
                 });
                 dispatch(setMovies(moviesFromApi));
-                console.log('dispatch movies', moviesFromApi);
 
                 
             })
@@ -139,7 +135,6 @@ export const MainView = () => {
                         element={
                             <>
                                 {!user ? (
-                                    console.log("user not found"),
                                     <Navigate to="/login" replace />
                                 ) : (
                                     <Col>
@@ -172,57 +167,3 @@ export const MainView = () => {
     );
     
 };
-
-                // Older code below for later reference
-                
-                //         <Col md={5}>
-                //             <LoginView
-                //                 onLoggedIn={(user, token) => {
-                //                     setUser(user);
-                //                     setToken(token);
-                //                 }}
-                //             />
-                //             or
-                //             <SignupView />
-                //         </Col>
-                // ) : selectedMovie ? (
-
-                // <>
-                //     <Col md={8} className="mx-auto">
-                //         <MovieView
-                //             style={{ border: "1px solid green" }}
-                //             movie={selectedMovie}
-                //             onBackClick={() => setSelectedMovie(null)} />
-                //     </Col>
-                //     <hr />
-                //     <h2> SimilarMovies</h2>
-                //         {similarMovies.map((movie) => (
-                //         <Col key={movie.id} md={3}>
-                //             <MovieCard
-                //                 style={{ border: "1px solid green" }}
-                //                 movie={movie}
-                //                 onMovieClick={(newSelectedMovie) => {
-                //                     setSelectedMovie(newSelectedMovie);
-                //                 }}
-                //             />
-                //         </Col>
-                //     ))}
-                // </>
-                // ) : movies.length === 0 ? (
-                //     <div> The list is empty</div>
-                // ) : (
-                //     <>
-                //             {movies.map((movie) => (
-                //                 <Col className="mb-5" key={movie.id} md={3}>
-                //                     <MovieCard
-                //                         movie={movie}
-                //                         onMovieClick={(newSelectedMovie) => {
-                //                             setSelectedMovie(newSelectedMovie);
-                //                         }}
-                //                     />
-                //                 </Col>
-                //             ))}
-
-                //     <Button variant="danger" onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
-                //     </>
-                //     )}      

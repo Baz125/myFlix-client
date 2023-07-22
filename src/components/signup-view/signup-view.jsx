@@ -1,13 +1,21 @@
 import React from "react";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import './signup-view.scss'
 
 export const SignupView = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
     
+    const handleBackToLogin = (event) => {
+        event.preventDefault();
+        navigate('/login');
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -27,7 +35,7 @@ export const SignupView = () => {
         }).then((response) => {
             if (response.ok) {
                 alert("Signup successful");
-                window.location.reload();
+                navigate("/");
             } else {
                 alert("Signup failed");
             }
@@ -38,7 +46,7 @@ export const SignupView = () => {
     return (
         <>
             <h1>Sign up for a free account</h1>
-            <p>Give us some info about yourself below, and we'll create you a free account</p>
+            <p>Give us some info about yourself below, and we'll create a free account for you</p>
             <Form onSubmit={handleSubmit} >
                 <Form.Group controlId="validationCustom01">
                     <Form.Label>Username:</Form.Label>
@@ -85,8 +93,10 @@ export const SignupView = () => {
                 </Form.Group>
                 
                 
-                <Button variant="primary" type="submit">Submit</Button>
+                <Button className="signup-btn" variant="primary" type="submit">Submit</Button>
             </Form>
+            <br/>
+            <a href="#" onClick={handleBackToLogin}>Back to login</a>
 
         </>
     )

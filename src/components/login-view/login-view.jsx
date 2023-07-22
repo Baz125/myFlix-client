@@ -1,23 +1,28 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { setToken, setUser } from "../../redux/reducers/user";
 
 export const LoginView = () => {
-    //These states are created in order to "bind" the username and password to them
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const handleSignUpClick = (event) => {
+        event.preventDefault();
+        navigate('/signup');
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+    
         const data = {
             username: username,
             password: password
         };
+    
         fetch("https://moviedb125.herokuapp.com/login", {
             method: "POST",
             headers: {
@@ -26,16 +31,14 @@ export const LoginView = () => {
             body: JSON.stringify(data),
         })
             .then(response => {
-                console.log(response)
                 if (response.status !== 200) {
-                    alert ("Username or password is incorrect")
+                    alert("Username or password is incorrect")
                     throw new Error(response.body.message)
                 }
                 return response;
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Login response: ", data);
                 if (data.user) {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
@@ -52,7 +55,10 @@ export const LoginView = () => {
             });
     };
 
-        return (
+    return (
+        <>
+            <h1>Sign in to access your account</h1>
+            <p>Don't have an account with us yet? <span><a href="#" onClick={handleSignUpClick}>Sign Up Now</a></span></p>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="loginUsername">
                     <Form.Label>Username: </Form.Label>
@@ -64,7 +70,7 @@ export const LoginView = () => {
                         minLength="3"
                     />
                 </Form.Group>
-            
+        
                 <Form.Group controlId="loginPassword">
                     <Form.Label>Password: </Form.Label>
                     <Form.Control
@@ -77,5 +83,6 @@ export const LoginView = () => {
                 </Form.Group>
                 <Button variant="primary" type="submit">Submit</Button>
             </Form>
-        );
+        </>
+    );
 };

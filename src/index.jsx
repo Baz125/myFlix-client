@@ -12,9 +12,9 @@ import "./custom.scss";
 const MyFlixApplication = () => {
     return (
         <Provider store={store}>
-            <Container fluid className="p-0">
-                <MainView text="light" />
-            </Container>
+                <Container fluid className="p-0">
+                    <MainView text="light" />
+                </Container>
         </Provider>
     ); 
 };

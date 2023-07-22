@@ -1,14 +1,17 @@
-import PropTypes from "prop-types";
-import { Button, Col, Row, Container } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import countdown from "../../../assets/countdown.gif";
 import { MovieCard } from "../movie-card/movie-card";
 import "./movie-view.scss";
-import "./movie-view.scss";
 
-export const MovieView = ({ movies, token, updateFavorites, favoriteMovies }) => {
+export const MovieView = () => {
+    const {movies} = useSelector((state) => state.movies.movies);
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);
+    
+    if(!movie) return  <img src={countdown} fluid />
 
     const similarMovies = movies.filter(m => m.genre.Name === movie.genre.Name && m.id !== movie.id);
 
@@ -44,11 +47,7 @@ export const MovieView = ({ movies, token, updateFavorites, favoriteMovies }) =>
                 {similarMovies.map((movie) => (
                     <Col text="light" className="mb-4" key={movie.id} md={4}>
                         <MovieCard
-                            style={{ border: "1px solid green" }}
                             movie={movie}
-                            token={token}
-                            isFav={favoriteMovies.find(fav => fav.id === movie.id)}
-                            updateFavorites={updateFavorites}
                         />
                     </Col>
                 ))}

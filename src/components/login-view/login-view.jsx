@@ -1,12 +1,15 @@
-import React from "react";
-import { useState } from "react";
-import { Button, Form } from "react-bootstrap"; 
-import {Navigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { setToken, setUser } from "../../redux/reducers/user";
 
-export const LoginView = ({ onLoggedIn }) => {
+export const LoginView = () => {
     //These states are created in order to "bind" the username and password to them
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const dispatch = useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -37,15 +40,12 @@ export const LoginView = ({ onLoggedIn }) => {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("username", data.user.Username);
-                    onLoggedIn(data.user, data.token);
+                    dispatch(setToken(data.token));
+                    dispatch(setUser(data.user));
                     return <Navigate to="/" />;
                 } else {
                     alert("No such user");
                 }
-                if (data.ok) {
-                    onLoggedIn(username);
-                }
-
             })
             .catch((e) => {
                 console.log("Something went wrong", e);

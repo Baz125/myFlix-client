@@ -7,7 +7,18 @@ export const SignupView = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
+    const [validated, setValidated] = useState(false);
 
+    const handleValidation = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+    
+        setValidated(true);
+    };
+    
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -33,12 +44,18 @@ export const SignupView = () => {
             }
         });
     }
+
+    const handleSubmitAndValidate = () => {
+        handleSubmit();
+        handleValidation();
+    } 
+
     return (
         <>
             <h1>Sign up for a free account</h1>
             <p>Give us some info about yourself below, and we'll create you a free account</p>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formUsername">
+            <Form onSubmit={handleSubmitAndValidate} noValidate validated={validated} >
+                <Form.Group controlId="validationCustom01">
                     <Form.Label>Username:</Form.Label>
                     <Form.Control
                         type="text"
@@ -47,6 +64,9 @@ export const SignupView = () => {
                         required
                         minLength="3"
                     />
+                    <Form.Control.Feedback type="invalid">
+                        Username must be at least 3 characters.
+                    </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="formPassword">

@@ -1,21 +1,25 @@
 import moment from "moment/moment";
 import { useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import accountIcon from "../../../assets/account-circle.svg";
+import { setUser } from "../../redux/reducers/user";
 import { MovieCard } from "../movie-card/movie-card";
 import './profile-view.scss';
 
-export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favoriteMovies = [], updateFavorites }) => {
+export const ProfileView = ({onLoggedOut}) => {
 
+    const {user, token} = useSelector((state) => state.user);
+    const {favoriteMovies} = useSelector((state) => state.movies.movies);
+    const dispatch = useDispatch();
     //states to manage changes to user information
     const [username, setUsername] = useState(user.Username);
     const [email, setEmail] = useState(user.Email);
     const [birthday, setBirthday] = useState(user.Birthday);
-
-    const storedToken = localStorage.getItem("token");
-
+    
     //code for the modals
     const [showUpdateModal, setUpdateModal] = useState(false);
     const handleCloseUpdateModal = () => setUpdateModal(false);
@@ -24,8 +28,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
     const [showDeleteModal, setDeleteModal] = useState(false);
     const handleCloseDeleteModal = () => setDeleteModal(false);
     const handleShowDeleteModal = () => setDeleteModal(true);
-    console.log("favoriteMovies: ", favoriteMovies)
-
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -53,11 +56,11 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                 alert("Update failed");
             }
         })
-            .then((data) => {
+            .then((data) => { 
                 console.log("resolved data", data);
-                updateUser(data);
+                dispatch(setUser(data))
                 handleCloseUpdateModal();
-            });
+        });
     }
 
     const handleDelete = (event) => {
@@ -82,66 +85,62 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
         });
     }
 
-    console.log("favoriteMovies: ", favoriteMovies)
-
     return (
         <Container>
             <Row className="d-flex justify-content-center p-4 profile-view">
-                <Card
-                    style={{ minWidth: "10rem", maxWidth: "20rem" }}
-                    className="shadow-lg p-3 rounded-4 text-center"
-                    text="light"
-                    bg="secondary"
+            <Card
+                style={{ minWidth: "10rem", maxWidth: "20rem" }}
+                className="shadow-lg p-3 rounded-4 text-center"
+                text="light"
+                bg="secondary"
                 >
                     <div className="image-container">
-                        <Card.Img
-                            variant="top"
-                            src={accountIcon}
-                            className="card-image"
-                        />
+                <Card.Img
+                    variant="top"
+                    src={accountIcon}
+                    className="card-image"
+                        /> 
                     </div>
-                    <Card.Body>
-                        <Card.Title>Profile Information</Card.Title>
-                        <Card.Text>
-                            <div>
-                                <span>Username: </span>
-                                <span>{user.Username}</span>
-                            </div>
-                            <div>
-                                <span>Email: </span>
-                                <span>{user.Email}</span>
-                            </div>
-                            {user.Birthday && (
-                                <div>
-                                    <span>Birthday: </span>
-                                    <span>{moment(user.Birthday).format("Do MMM YYYY")}</span>
-                                </div>
-                            )}
+                <Card.Body>
+                    <Card.Title>Profile Information</Card.Title>   
+                    <Card.Text>
+                        <span>Username: </span>
+                        <span>{user.Username}</span>
                         </Card.Text>
 
-                        <Button onClick={handleShowUpdateModal} variant="info" style={{ cursor: "pointer" }} className="modalBtn">Update user information</Button>
+                        <Card.Text>
+                        <span>Email: </span>
+                        <span>{user.Email}</span>
+                        </Card.Text>
+                    
+                    <Card.Text>
+                    {user.Birthday && (
+                        <>
+                        <span>Birthday: </span>
+                        <span>{moment(user.Birthday).format("Do MMM YYYY")}</span>
+                        </>
+                    )}
+                    </Card.Text>
 
-                        <Button onClick={handleShowDeleteModal} variant="primary" className="warning-button modalBtn" style={{ cursor: "pointer" }}>Delete Account</Button>
-                    </Card.Body>
-                </Card>
+                    <Button onClick={handleShowUpdateModal} variant="info" style={{ cursor: "pointer" }} className="modalBtn">Update user information</Button>
+
+                    <Button onClick={handleShowDeleteModal} variant="primary" className="warning-button modalBtn" style={{ cursor: "pointer" }}>Delete Account</Button>
+                </Card.Body>    
+            </Card>
             </Row>
             <Row className="favorite-movies">
-                {!favoriteMovies.length ? (
+                {!favoriteMovies?.length  ? (
                     <div>You have no favourite movies yet!</div>
-                ) : (
-                    <>
+                ) : ( 
+                    <>   
                         <h3>Favourite Movies: </h3>
-                        {favoriteMovies.map(movie => (
+                {favoriteMovies?.map(movie => (
                             <Col className="mb-4" key={movie.id} md={4}>
                                 <MovieCard
-                                    movie={movie}
-                                    token={token}
-                                    isFav
-                                    updateFavorites={updateFavorites}
-                                />
+                            movie={movie}                                />
                             </Col>
                         ))}
-                    </>
+                        </>
                 )}
             </Row>
 
@@ -149,14 +148,14 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
             <Link to={`/`}>
                 <Button className="back-button" style={{ cursor: "pointer" }}>Back</Button>
             </Link>
-
+            
             <Modal show={showUpdateModal} onHide={handleCloseUpdateModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Add your updated information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group controlId="formUsername">
-                        <Form.Label>Username:</Form.Label>
+                    <Form.Label>Username:</Form.Label>
                         <Form.Control
                             type="text"
                             value={username}
@@ -167,7 +166,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Email: </Form.Label>
+                    <Form.Label>Email: </Form.Label>
                         <Form.Control
                             type="email"
                             value={email}
@@ -177,7 +176,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Birthday: </Form.Label>
+                    <Form.Label>Birthday: </Form.Label>
                         <Form.Control
                             type="date"
                             value={moment(birthday).format("YYYY-MM-DD")}
@@ -185,7 +184,7 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
                             required
                         />
                     </Form.Group>
-
+                    
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseUpdateModal}>
@@ -215,12 +214,3 @@ export const ProfileView = ({ user, token, onLoggedOut, movies, updateUser, favo
     );
 
 };
-
-// MovieView.propTypes = {
-//     movie: PropTypes.shape({
-//         featured: PropTypes.bool.isRequired,
-//         title: PropTypes.string.isRequired,
-//         image: PropTypes.string.isRequired,
-//         director: PropTypes.object
-//     }).isRequired,
-// };

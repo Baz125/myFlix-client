@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import countdown from "../../../assets/countdown.gif";
 import { setFavoriteMovies, setMovies } from "../../redux/reducers/movies";
 import { setToken, setUser } from "../../redux/reducers/user";
@@ -16,7 +16,7 @@ import { MoviesList } from "../movies-list/movies-list";
 
 
 export const MainView = () => {
-    const {movies} = useSelector((state) => state.movies.movies);
+    const movies = useSelector((state) => state.movies.movies);
     const {user, token} = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export const MainView = () => {
                     };
                 });
                 dispatch(setMovies(moviesFromApi));
-                console.log('dispatch movies', moviesFromApi)
+                console.log('dispatch movies', moviesFromApi);
 
                 
             })
@@ -73,7 +73,7 @@ export const MainView = () => {
 
     //sets favoriteMovies state, triggered any time token or movies changes.
     useEffect(() => {
-        if (!token || !movies?.length || !user.FavoriteMovies) {
+        if (!token || !movies?.length || !user || !user.FavoriteMovies) {
             return;
         }
         dispatch(setFavoriteMovies(movies.filter(m => user.FavoriteMovies.includes(m.id)))); // Instead of filling it while declaring, we moved it useEffect, so that once movie is available, the setFavoriteMovies is called and that causes rerendering.
@@ -83,6 +83,11 @@ export const MainView = () => {
     return (    
         <BrowserRouter>
             <NavigationBar
+                onLoggedOut={() => {
+                    dispatch(setUser(null))
+                    dispatch(setToken(null))
+                    localStorage.clear();
+                }}
                 token={token}    
             />
             <Row className="justify-content-md-center px-5">

@@ -13,7 +13,7 @@ import "./movie-card.scss";
 export const MovieCard = ({ movie }) => {
     const navigate = useNavigate();
     const {user, token} = useSelector((state) => state.user);
-    const {favoriteMovies} = useSelector((state) => state.movies.movies);
+    const favoriteMovies = useSelector((state) => state.movies.favoriteMovies);
     const dispatch = useDispatch();
 
     const isFav = !!favoriteMovies?.length && favoriteMovies.find(fav => fav.id === movie.id);
@@ -69,7 +69,7 @@ export const MovieCard = ({ movie }) => {
         <Card className="h-100" text="light" bg="secondary">
             <div className="card-content">  
                 <Card.Body>    
-                    <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+                    <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer', flexGrow: 1 }}>
                         <Card.Img variant="top" src={movie.image} />
                         <Card.Title>{movie.title}</Card.Title>
                         <div className="card-text-container">

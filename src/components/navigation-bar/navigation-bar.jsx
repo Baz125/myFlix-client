@@ -32,7 +32,7 @@ export const NavigationBar = ({ token, onLoggedOut }) => {
                         <>
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/profile-view">My Profile</Nav.Link>
-                            <Nav.Link onClick={() => dispatch(setUser(null))}>Logout</Nav.Link>
+                            <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>
                         </>
                         )}
                     </Nav>

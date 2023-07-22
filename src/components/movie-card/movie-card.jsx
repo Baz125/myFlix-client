@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { addFavoriteMovie, removeFavoriteMovie } from '../../redux/reducers/movies';
 import "./movie-card.scss";
 
-//Function Component
 export const MovieCard = ({ movie }) => {
     const navigate = useNavigate();
     const {user, token} = useSelector((state) => state.user);
@@ -94,7 +93,6 @@ export const MovieCard = ({ movie }) => {
     );
 };
 
-//Define all prop constraints
 MovieCard.propTypes = {
     movie: PropTypes.shape({
         title: PropTypes.string.isRequired,

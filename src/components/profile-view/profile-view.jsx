@@ -57,7 +57,6 @@ export const ProfileView = ({onLoggedOut}) => {
             }
         })
             .then((data) => { 
-                console.log("resolved data", data);
                 dispatch(setUser(data))
                 handleCloseUpdateModal();
         });

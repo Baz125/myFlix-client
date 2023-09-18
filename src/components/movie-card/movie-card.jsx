@@ -68,7 +68,7 @@ export const MovieCard = ({ movie }) => {
         <Card className="h-100" text="light" bg="secondary">
             <div className="card-content">  
                 <Card.Body>    
-                    <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer', flexGrow: 1 }}>
+                    <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
                         <Card.Img as={Image} variant="top" src={movie.image} fluid={true} />
                         <Card.Title>{movie.title}</Card.Title>
                         <div className="card-text-container">

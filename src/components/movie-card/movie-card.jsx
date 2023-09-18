@@ -3,7 +3,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from "prop-types";
 import React from "react";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Image } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { addFavoriteMovie, removeFavoriteMovie } from '../../redux/reducers/movies';
@@ -69,7 +69,7 @@ export const MovieCard = ({ movie }) => {
             <div className="card-content">  
                 <Card.Body>    
                     <div className="clickable-area" onClick={handleCardClick} style={{ cursor: 'pointer', flexGrow: 1 }}>
-                        <Card.Img variant="top" src={movie.image} style={{ objectFit: 'none' }} />
+                        <Card.Img as={Image} variant="top" src={movie.image} fluid={true} />
                         <Card.Title>{movie.title}</Card.Title>
                         <div className="card-text-container">
                             <Card.Text>{movie.actors.join(" & ")}</Card.Text>

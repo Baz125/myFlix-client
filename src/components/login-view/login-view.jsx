@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { setToken, setUser } from "../../redux/reducers/user";
+import "./login-view.scss";
 
 export const LoginView = () => {
     const [username, setUsername] = useState("");
@@ -58,7 +59,7 @@ export const LoginView = () => {
     return (
         <>
             <h1>Sign in to access your account</h1>
-            <p>Don't have an account with us yet? <span><a href="#" onClick={handleSignUpClick}>Sign Up Now</a></span></p>
+            
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="loginUsername">
                     <Form.Label>Username: </Form.Label>
@@ -81,7 +82,8 @@ export const LoginView = () => {
                         minLength="3"
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">Submit</Button>
+                <Button className="submit-btn" variant="primary" type="submit">Submit</Button>
+                <p>Don't have an account with us yet? <span><a href="#" onClick={handleSignUpClick}>Sign Up Now</a></span></p>
             </Form>
         </>
     );
